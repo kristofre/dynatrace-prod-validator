@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dynatrace>
+    <sensorconfigurations>
+        <sensor id="com.dynatrace.diagnostics.knowledgesensor.dotnet.aspnet">
+            <property name="d" type="number" opperand=">=" eval="10" />
+            <property name="e" type="bool" opperand="=" eval ="true" />
+        </sensor>
+    </sensorconfigurations>
+</dynatrace>
