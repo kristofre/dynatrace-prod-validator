@@ -1,0 +1,17 @@
+<component name="libraryTable">
+  <library name="org.apache.poi:poi-ooxml:3.11" type="repository">
+    <properties maven-id="org.apache.poi:poi-ooxml:3.11" />
+    <CLASSES>
+      <root url="jar://$MAVEN_REPOSITORY$/org/apache/poi/poi-ooxml/3.11/poi-ooxml-3.11.jar!/" />
+      <root url="jar://$MAVEN_REPOSITORY$/org/apache/poi/poi/3.11/poi-3.11.jar!/" />
+      <root url="jar://$MAVEN_REPOSITORY$/commons-codec/commons-codec/1.9/commons-codec-1.9.jar!/" />
+      <root url="jar://$MAVEN_REPOSITORY$/org/apache/poi/poi-ooxml-schemas/3.11/poi-ooxml-schemas-3.11.jar!/" />
+      <root url="jar://$MAVEN_REPOSITORY$/org/apache/xmlbeans/xmlbeans/2.6.0/xmlbeans-2.6.0.jar!/" />
+      <root url="jar://$MAVEN_REPOSITORY$/stax/stax-api/1.0.1/stax-api-1.0.1.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$MAVEN_REPOSITORY$/org/apache/poi/poi-ooxml/3.11/poi-ooxml-3.11-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

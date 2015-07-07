@@ -35,6 +35,8 @@ public class Measure implements Comparable<Measure> {
     private String infoMatch;
     private String classNameMatch;
     private String methodNameMatch;
+    private String endPointMatch;
+    private String operationNameMatch;
 
     public Boolean getIsApplicationAggregated() {
         return isApplicationAggregated;
@@ -250,6 +252,22 @@ public class Measure implements Comparable<Measure> {
     @XmlAttribute(name = "methodnamematch")
     public void setMethodNameMatch(String methodNameMatch) {
         this.methodNameMatch = methodNameMatch;
+    }
+
+    public String getEndPointMatch() {
+        return endPointMatch;
+    }
+    @XmlAttribute(name = "endpointmatch")
+    public void setEndPointMatch(String endPointMatch) {
+        this.endPointMatch = endPointMatch;
+    }
+
+    public String getOperationNameMatch() {
+        return operationNameMatch;
+    }
+    @XmlAttribute(name = "operationnamematch")
+    public void setOperationNameMatch(String operationNameMatch) {
+        this.operationNameMatch = operationNameMatch;
     }
 
     public int compareTo(Measure measure) {

@@ -5,5 +5,5 @@
             <property name="d" type="number" opperand=">=" eval="10" />
             <property name="e" type="bool" opperand="=" eval ="true" />
         </sensor>
-    </sensorconfigurations>
+    </sensorconfigurations -agentpath:/opt/dynatrace-6.2/agent/lib64/libdtagent.so=name=Java_ProfileValidator,server=192.168.232.10:9998>
 </dynatrace>

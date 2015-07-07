@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dynatrace>
+    <sensors>
+        <sensor id="com.dynatrace.easytravel.sensorpack.easyTravel_Memory" name="easyTravel Memory" tech="java"/>
+        <sensor id="com.dynatrace.easytravel.sensorpack.easyTravel_Memory_.NET" name="easyTravel Memory .NET" tech="dotnet"/>
+        <sensor id="com.compuware.php.WordPress" name="Wordpress" tech="php"/>
+        <sensor id="com.dynatrace.diagnostics.knowledgesensor.dotnet.appdomaininitialization" name=".NET App Domain Init" tech="dotnet"/>
+        <sensor id="com.dynatrace.diagnostics.knowledgesensor.java.classloader" name="Java Class Loader" tech="java" defaulthide="true"/>
+        <sensor id="com.dynatrace.diagnostics.knowledgesensor.dotnet.default" name=".NET Default" tech="dotnet" defaulthide="true"/>
+        <sensor id="com.dynatrace.diagnostics.knowledgesensor.java.default" name="Java Default" tech="java" defaulthide="true"/>
+        <sensor id="com.dynatrace.diagnostics.knowledgesensor.java.ejb" name="EJB" tech="java"/>
+        <sensor id="com.dynatrace.diagnostics.knowledgesensor.java.nosql.cassandra.tagging" name="Cassandra Tagging" tech="java"/>
+        <sensor id="com.dynatrace.diagnostics.knowledgesensor.java.jdbc" name="JDBC" tech="java">
+            <property name="aggregate" type="boolean" operator="=" value="true" />
+            <property name="capturebindvalues" type="boolean" operator="=" value="false" />
+            <property name="maxsqlstringlength" type="integer" operator="lt" value="1024" />
+        </sensor>
+        <sensor id="com.dynatrace.diagnostics.knowledgesensor.java.jndi" name="JNDI" tech="java"/>
+        <sensor id="com.dynatrace.diagnostics.knowledgesensor.java.nosql.mongodb" name="MongoDB" tech="java"/>
+        <sensor id="com.dynatrace.diagnostics.knowledgesensor.java.nosql.cassandra" name="Cassandra" tech="java"/>
+        <sensor id="com.dynatrace.diagnostics.knowledgesensor.java.struts" name="Struts" tech="java"/>
+        <sensor id="com.dynatrace.diagnostics.knowledgesensor.java.http" name="Web Requests" tech="java"/>
+        <sensor id="com.dynatrace.diagnostics.knowledgesensor.java.hibernate" name="Hibernate" tech="java" noplacement="true"/>
+        <sensor id="com.dynatrace.diagnostics.knowledgesensor.java.rmi" name="RMI" tech="java"/>
+        <sensor id="com.dynatrace.diagnostics.knowledgesensor.java.jbossesbtagging" name="Jboss ESB Tagging" tech="java" />
+        <sensor id="com.dynatrace.diagnostics.knowledgesensor.java.jta" name="JTA" tech="java"/>
+        <sensor id="com.dynatrace.diagnostics.knowledgesensor.java.elasticsearch" name="Elastic Search" tech="java"/>
+        <sensor id="com.dynatrace.diagnostics.knowledgesensor.java.rmitagging" name="RMI Tagging" tech="java"/>
+        <sensor id="com.dynatrace.diagnostics.knowledgesensor.java.xa" name="XA" tech="java"/>
+        <sensor id="com.dynatrace.diagnostics.knowledgesensor.java.logger" name="Java Logger" tech="java"/>
+        <sensor id="com.dynatrace.diagnostics.knowledgesensor.java.amqp" name="Java Active MQ" tech="java"/>
+        <sensor id="com.dynatrace.diagnostics.knowledgesensor.java.muletagging" name="Mule Tagging" tech="java"/>
+        <sensor id="com.dynatrace.diagnostics.knowledgesensor.dotnet.amqp" name=".NET Active MQ" tech="dotnet"/>
+        <sensor id="com.dynatrace.diagnostics.knowledgesensor.java.webservice" name="Java Web Services" tech="java"/>
+        <sensor id="com.dynatrace.diagnostics.knowledgesensor.java.amqpreceiveentry" name="Java Active MQ Receive Entry Point" tech="java"/>
+        <sensor id="com.dynatrace.diagnostics.knowledgesensor.java.jms" name="JMS" tech="java"/>
+        <sensor id="com.dynatrace.diagnostics.knowledgesensor.dotnet.amqpreceiveentry" name=".NET Active MQ Receive Entry Point" tech="dotnet"/>
+        <sensor id="com.dynatrace.diagnostics.knowledgesensor.java.tibcotagging" name="Tibco Tagging" tech="java"/>
+        <sensor id="com.dynatrace.diagnostics.knowledgesensor.dotnet.wpf"  name="WPF" tech="dotnet"/>
+        <sensor id="com.dynatrace.diagnostics.knowledgesensor.java.mqseries" name="MQ Series" tech="java"/>
+        <sensor id="com.dynatrace.diagnostics.knowledgesensor.java.hadoop"  name="Hadoop" tech="java"/>
+        <sensor id="com.dynatrace.diagnostics.knowledgesensor.java.threadstart" name="Thread Start" tech="java"/>
+        <sensor id="com.dynatrace.diagnostics.knowledgesensor.java.tibco" name="Tibco" tech="java"/>
+        <sensor id="com.dynatrace.diagnostics.knowledgesensor.java.jmstagging" name="JMS Tagging" tech="java"/>
+        <sensor id="com.dynatrace.diagnostics.knowledgesensor.dotnet.winforms" name=".NET Win Forms" tech="dotnet"/>
+        <sensor id="com.dynatrace.diagnostics.knowledgesensor.dotnet.messaging" name=".NET Messaging" tech="dotnet"/>
+        <sensor id="com.dynatrace.diagnostics.knowledgesensor.java.exception" name="Java Exception" tech="java"/>
+        <sensor id="com.dynatrace.diagnostics.knowledgesensor.dotnet.heap" name=".NET Heap" tech="dotnet"/>
+        <sensor id="com.dynatrace.diagnostics.knowledgesensor.dotnet.disableinlining" name=".NET Disable Inlining" tech="dotnet"/>
+        <sensor id="com.dynatrace.diagnostics.knowledgesensor.dotnet.threadtagging" name=".NET Thread Tagging" tech="dotnet"/>
+        <sensor id="com.dynatrace.diagnostics.knowledgesensor.dotnet.webservicetagging" name=".NET Web Service Tagging" tech="dotnet"/>
+        <sensor id="com.dynatrace.diagnostics.knowledgesensor.java.awt" name="AWT" tech="java" />
+        <sensor id="com.dynatrace.diagnostics.knowledgesensor.dotnet.mqseries" name=".NET MQ Series" tech="dotnet"/>
+        <sensor id="com.dynatrace.diagnostics.knowledgesensor.java.memory" name="Java Memory" tech="java"/>
+        <sensor id="com.dynatrace.diagnostics.knowledgesensor.dotnet.adonet" name="ADO .NET" tech="dotnet">
+            <property name="aggregate" type="boolean" operator="=" value="true" />
+            <property name="capturebindvalues" type="boolean" operator="=" value="true" />
+            <property name="maxsqlstringlength" type="integer" operator="lt" value="1024" />
+        </sensor>
+        <sensor id="com.dynatrace.diagnostics.knowledgesensor.dotnet.httptagging" name=".NET HTTP Tagging" tech="dotnet"/>
+        <sensor id="com.dynatrace.diagnostics.knowledgesensor.dotnet.exception" name=".NET Exception" tech="dotnet"/>
+        <sensor id="com.dynatrace.diagnostics.knowledgesensor.java.jmx" name="Java JMX" tech="java" />
+        <sensor id="com.dynatrace.diagnostics.knowledgesensor.dotnet.webservice" name=".NET Web Services" tech="dotnet"/>
+        <sensor id="com.dynatrace.diagnostics.knowledgesensor.dotnet.aspnetex" name="ASP.NET Exceptions" tech="dotnet"/>
+        <sensor id="com.dynatrace.diagnostics.knowledgesensor.dotnet.remoting" name=".NET Remoting" tech="dotnet"/>
+        <sensor id="com.dynatrace.diagnostics.knowledgesensor.dotnet.component" name=".NET Component" tech="dotnet"/>
+        <sensor id="com.dynatrace.diagnostics.knowledgesensor.dotnet.tagging" name=".NET Tagging" tech="dotnet"/>
+        <sensor id="com.dynatrace.diagnostics.knowledgesensor.dotnet.messagingreceiveentrypoint" name=".NET Messaging Receive Entry Point" tech="dotnet"/>
+        <sensor id="com.dynatrace.diagnostics.knowledgesensor.java.jmsreceiveentry" name="JMS Receive Entry Point" tech="java"/>
+        <sensor id="com.dynatrace.diagnostics.knowledgesensor.dotnet.aspnet" name="ASP.NET" tech="dotnet"/>
+        <sensor id="com.dynatrace.diagnostics.knowledgesensor.dotnet.logging" name=".NET Logging" tech="dotnet"/>
+        <sensor id="com.dynatrace.diagnostics.knowledgesensor.dotnet.mqseriesreceiveentrypoint" name=".NET MQ Series Receive Entry Point" tech="dotnet"/>
+        <sensor id="com.dynatrace.diagnostics.knowledgesensor.java.mqseriesreceiveentry" name="Java MQ Series Receive Entry Point" tech="java"/>
+        <sensor id="com.dynatrace.diagnostics.knowledgesensor.dotnet.wcf" name="WCF" tech="dotnet"/>
+        <sensor id="com.dynatrace.diagnostics.knowledgesensor.sampling.dotnet" name=".NET Sampling" tech="Sampling"/>
+        <sensor id="com.dynatrace.diagnostics.knowledgesensor.js.addeventlistenerwrapper" name="JavaScript - Add Event Listener Wrapper" tech="Javascript"/>
+        <sensor id="com.dynatrace.diagnostics.knowledgesensor.js.activex" name="JavaScript - ActiveX" tech="Javascript"/>
+        <sensor id="com.dynatrace.diagnostics.knowledgesensor.js.resourcetiming" name="JavaScript - Resource Timing" tech="Javascript"/>
+        <sensor id="com.dynatrace.diagnostics.knowledgesensor.js.sendresource" name="JavaScript - Send Resource" tech="Javascript"/>
+        <sensor id="com.dynatrace.diagnostics.knowledgesensor.dotnet.wcftagging" name="WCF Tagging" tech="dotnet" />
+        <sensor id="com.dynatrace.diagnostics.knowledgesensor.js.mootools" name="JavaScript - MooTools" tech="Javascript" />
+        <sensor id="com.dynatrace.diagnostics.knowledgesensor.js.websockets" name="JavaScript - Web Sockets" tech="Javascript"/>
+        <sensor id="com.dynatrace.diagnostics.knowledgesensor.java.imssoapgatewaytagging" name="IMS SOAP Gateway Tagging" tech="java"/>
+        <sensor id="com.dynatrace.diagnostics.knowledgesensor.js.actioncapturing" name="JavaScript - Action Capturing" tech="Javascript"/>
+        <sensor id="com.dynatrace.diagnostics.knowledgesensor.js.angular" name="JavaScript - AngularJS" tech="Javascript"/>
+        <sensor id="com.dynatrace.diagnostics.knowledgesensor.adk" name="ADK" tech="sdk"/>
+        <sensor id="com.dynatrace.diagnostics.knowledgesensor.cics" name="CICS" tech="CICS"/>
+        <sensor id="com.dynatrace.diagnostics.knowledgesensor.js.prototype" name="JavaScript - Prototype" tech="Javascript"/>
+        <sensor id="com.dynatrace.diagnostics.knowledgesensor.euem.webserver" name="Web Server" tech="webserver"/>
+        <sensor id="com.dynatrace.diagnostics.knowledgesensor.ims" name="IMS" tech="IMS"/>
+        <sensor id="com.dynatrace.diagnostics.knowledgesensor.dotnet.tests" name=".NET Tests" tech="dotnet"/>
+        <sensor id="com.dynatrace.diagnostics.knowledgesensor.js.perceivedrendertime" name="JavaScript - Perceived Render Time" tech="Javascript"/>
+        <sensor id="com.dynatrace.diagnostics.knowledgesensor.imsconnect" name="IMS Connect" tech="IMS"/>
+        <sensor id="com.dynatrace.diagnostics.knowledgesensor.js.streaming" name="JavaScript - Streaming" tech="Javascript"/>
+        <sensor id="com.dynatrace.diagnostics.knowledgesensor.imscontrol" name="JavaScript - IMS Control" tech="IMS"/>
+        <sensor id="com.dynatrace.diagnostics.knowledgesensor.java.ctg" name="CTG" tech="java"/>
+        <sensor id="com.dynatrace.diagnostics.knowledgesensor.js.timeout" name="JavaScript - Timeout" tech="Javascript"/>
+        <sensor id="com.dynatrace.diagnostics.knowledgesensor.java.nosql.hbase" name="HBase" tech="java"/>
+        <sensor id="com.dynatrace.diagnostics.knowledgesensor.java.servletEndUserTagging" name="User Experience" tech="java"/>
+        <sensor id="com.dynatrace.diagnostics.knowledgesensor.js.bandwidth" name="JavaScript - Bandwidth" tech="Javascript"/>
+        <sensor id="com.dynatrace.diagnostics.knowledgesensor.js.core" name="JavaScript - Core" tech="Javascript"/>
+        <sensor id="com.dynatrace.diagnostics.knowledgesensor.js.dojo" name="JavaScript - Dojo" tech="Javascript"/>
+        <sensor id="com.dynatrace.diagnostics.knowledgesensor.js.icefaces" name="JavaScript - IceFaces" tech="Javascript"/>
+        <sensor id="com.dynatrace.diagnostics.knowledgesensor.js.jquery" name="JavaScript - Jquery" tech="Javascript"/>
+        <sensor id="com.dynatrace.diagnostics.knowledgesensor.php.phpunit" name="PHP Unit" tech="php"/>
+        <sensor id="com.dynatrace.diagnostics.knowledgesensor.js.thirdparty" name="JavaScript - Third Party" tech="Javascript"/>
+        <sensor id="com.dynatrace.diagnostics.knowledgesensor.js.extjs" name="JavaScript - ExtJS" tech="Javascript"/>
+        <sensor id="com.dynatrace.diagnostics.knowledgesensor.php.oracle" name="PHP Oracle" tech="php"/>
+        <sensor id="com.dynatrace.diagnostics.knowledgesensor.php.default" name="PHP" tech="php"/>
+        <sensor id="com.dynatrace.diagnostics.knowledgesensor.php.pdo" name="PHP PDO" tech="php"/>
+        <sensor id="com.dynatrace.diagnostics.knowledgesensor.java.executor" name="Java Executor" tech="java" />
+        <sensor id="com.dynatrace.diagnostics.knowledgesensor.php.postgresql" name="PHP PostgreSQL" tech="php"/>
+        <sensor id="com.dynatrace.diagnostics.knowledgesensor.php.exception" name="PHP Exception" tech="php"/>
+        <sensor id="com.dynatrace.diagnostics.knowledgesensor.php.mysql" name="PHP MySQL" tech="php"/>
+        <sensor id="com.dynatrace.diagnostics.knowledgesensor.php.server" name="PHP Server" tech="php"/>
+        <sensor id="com.dynatrace.diagnostics.knowledgesensor.ria.javascript" name="RIA Javascript" tech="ria"/>
+        <sensor id="com.dynatrace.diagnostics.knowledgesensor.java.tests" name="Java Tests" tech="java"/>
+        <sensor id="com.dynatrace.diagnostics.knowledgesensor.php.curl" name="PHP cURL" tech="php"/>
+        <sensor id="com.dynatrace.diagnostics.knowledgesensor.php.logging" name="PHP Logging" tech="php"/>
+        <sensor id="com.dynatrace.diagnostics.knowledgesensor.ria.network" name="RIA Network" tech="ria"/>
+        <sensor id="com.dynatrace.diagnostics.knowledgesensor.ria.rendering" name="RIA Rendering" tech="ria"/>
+        <sensor id="com.dynatrace.diagnostics.knowledgesensor.js.genericxhr" name="JavaScript - Generic XHR" tech="Javascript"/>
+        <sensor id="com.dynatrace.diagnostics.knowledgesensor.js.navtiming" name="JavaScript - Navigation Timings" tech="Javascript"/>
+        <sensor id="com.dynatrace.diagnostics.knowledgesensor.sampling.java" name="Java Sampling" tech="Sampling"/>
+    </sensors>
+</dynatrace>

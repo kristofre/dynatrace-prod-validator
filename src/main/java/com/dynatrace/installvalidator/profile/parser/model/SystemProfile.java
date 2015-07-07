@@ -12,6 +12,17 @@ public class SystemProfile {
 	private ArrayList<SensorGroup> sensorGroups;
 	private ArrayList<Configuration> configurations;
 	private ArrayList<Measure> measures;
+	private UemConfiguration uemConfiguration;
+	private ArrayList<Technology> technologiesUsed;
+
+	private Boolean isTechDotNetActivated = false;
+	private Boolean isTechPhpActivated = false;
+	private Boolean isTechJavaActivated = true;
+	private Boolean isTechBrowserActivated = false;
+	private Boolean isTechNativeActivated = false;
+	private Boolean isTechWebServerActivated = false;
+
+
 	
 	public SystemProfile(){
 		
@@ -65,5 +76,71 @@ public class SystemProfile {
 	public void setMeasures(ArrayList<Measure> measures) {
 		this.measures = measures;
 	}
-	
+
+	public UemConfiguration getUemConfiguration() {
+		return uemConfiguration;
+	}
+	@XmlElement(name = "uemconfiguration")
+	public void setUemConfiguration(UemConfiguration uemConfiguration) {
+		this.uemConfiguration = uemConfiguration;
+	}
+
+	public ArrayList<Technology> getTechnologiesUsed() {
+		return technologiesUsed;
+	}
+	@XmlElement(name = "technology")
+	public void setTechnologiesUsed(ArrayList<Technology> technologiesUsed) {
+		this.technologiesUsed = technologiesUsed;
+	}
+
+	public Boolean getIsTechDotNetActivated() {
+		return isTechDotNetActivated;
+	}
+
+	public void setIsTechDotNetActivated(Boolean isTechDotNetActivated) {
+		this.isTechDotNetActivated = isTechDotNetActivated;
+	}
+
+	public Boolean getIsTechPhpActivated() {
+		return isTechPhpActivated;
+	}
+
+	public void setIsTechPhpActivated(Boolean isTechPhpActivated) {
+		this.isTechPhpActivated = isTechPhpActivated;
+	}
+
+	public Boolean getIsTechJavaActivated() {
+		return isTechJavaActivated;
+	}
+
+	public void setIsTechJavaActivated(Boolean isTechJavaActivated) {
+		this.isTechJavaActivated = isTechJavaActivated;
+	}
+
+	public Boolean getIsTechBrowserActivated() {
+		return isTechBrowserActivated;
+	}
+
+	public void setIsTechBrowserActivated(Boolean isTechBrowserActivated) {
+		this.isTechBrowserActivated = isTechBrowserActivated;
+	}
+
+	public Boolean getIsTechNativeActivated() {
+		return isTechNativeActivated;
+	}
+
+	public void setIsTechNativeActivated(Boolean isTechNativeActivated) {
+		this.isTechNativeActivated = isTechNativeActivated;
+	}
+
+	public Boolean getIsTechWebServerActivated() {
+		return isTechWebServerActivated;
+	}
+
+	public void setIsTechWebServerActivated(Boolean isTechWebServerActivated) {
+		this.isTechWebServerActivated = isTechWebServerActivated;
+	}
+
+
+
 }
