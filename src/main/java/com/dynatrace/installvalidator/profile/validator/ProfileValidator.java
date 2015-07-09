@@ -2,8 +2,6 @@ package com.dynatrace.installvalidator.profile.validator;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 
 import javax.xml.bind.JAXBContext;
@@ -13,7 +11,7 @@ import javax.xml.bind.Unmarshaller;
 import com.dynatrace.installvalidator.profile.parser.model.AgentGroup;
 import com.dynatrace.installvalidator.profile.parser.model.Dynatrace;
 import com.dynatrace.installvalidator.profile.parser.model.SystemProfile;
-import com.dynatrace.installvalidator.profile.reporting.ProfileReport;
+import com.dynatrace.installvalidator.profile.reporting.HtmlProfileReport;
 import org.apache.commons.cli.*;
 
 /**
@@ -73,7 +71,7 @@ public class ProfileValidator
 
 			String profileName = XMLfile.getName().substring(0, XMLfile.getName().indexOf(".profile.xml"));
 
-			ProfileReport report = new ProfileReport(profile);
+			HtmlProfileReport report = new HtmlProfileReport(profile);
 			if(outputFile.isEmpty())
 			{
 				File f = new File(".");

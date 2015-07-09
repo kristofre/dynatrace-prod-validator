@@ -16,18 +16,19 @@ import org.apache.commons.lang.StringEscapeUtils;
 /**
  * Created by kristof on 30.04.15.
  */
-public class ProfileReport {
+public class HtmlProfileReport {
     private MeasureController measureController;
     private UemConfigurationController uemConfigurationController;
     private SensorGroupController sensorGroupController;
     private ProfileController profileController;
     private SensorConfigurationController sensorConfigurationController;
     private SensorLibraryController sensorLibraryController;
+    private HtmlHelper htmlHelper;
 
     private SensorConfigValidator sensorConfigValidator;
 
     private SystemProfile profile;
-    public ProfileReport(SystemProfile profile) {
+    public HtmlProfileReport(SystemProfile profile) {
         this.measureController = new MeasureController(profile);
         this.uemConfigurationController = new UemConfigurationController(profile);
         this.sensorGroupController = new SensorGroupController(profile);
@@ -36,6 +37,7 @@ public class ProfileReport {
         this.profile = profile;
         this.sensorConfigValidator = new SensorConfigValidator();
         this.sensorLibraryController = new SensorLibraryController(profile);
+        this.htmlHelper = new HtmlHelper();
     }
 
     public void createReport(SystemProfile profile, String profileName, String outputFile)
@@ -44,7 +46,7 @@ public class ProfileReport {
         StringBuilder html = new StringBuilder();
 
 
-        html.append(generateReportHeader(profileName, profile.getDescription()));
+        html.append(htmlHelper.generateReportHeader(profileName, profile.getDescription()));
 
         html.append(generateAgentGroupLists(profile.getAgentGroups()));
         html.append(generateCustomMeasuresList());
@@ -57,7 +59,7 @@ public class ProfileReport {
         html.append(generateMeasureListOfType("JdbcMeasure"));
 
 
-        html.append(generateReportFooter());
+        html.append(htmlHelper.generateReportFooter());
         try {
             FileOutputStream out = new FileOutputStream(fileLocation);
             out.write(html.toString().getBytes());
@@ -78,7 +80,7 @@ public class ProfileReport {
             if(sensor!=null)
             {
                 String headers[] = {"Class", "Methods"};
-                builder.append(generateTableHeader(("Sensor Group : " + sensor.getDescription()), headers));
+                builder.append(htmlHelper.generateTableHeader(("Sensor Group : " + sensor.getDescription()), headers));
                 ArrayList<Class> classes = sensor.getClasses();
                 if(classes != null && classes.size()>0) {
                     for (Iterator<Class> classIterator = classes.iterator(); classIterator.hasNext(); ) {
@@ -120,7 +122,7 @@ public class ProfileReport {
         String headers[] = {"Sensor Name", "Sensor Properties"};
         for (Iterator<AgentGroup> agentGroupIterator = agentGroups.iterator(); agentGroupIterator.hasNext(); ) {
             AgentGroup agentGroup = agentGroupIterator.next();
-            builder.append(generateTableHeader((agentGroup.getId()), headers));
+            builder.append(htmlHelper.generateTableHeader((agentGroup.getId()), headers));
             ArrayList<Sensor> sensors = agentGroup.getSensorPlacement().getSensors();
             for (Iterator<Sensor> sensorIterator = sensors.iterator(); sensorIterator.hasNext(); ) {
                 Sensor sensor = sensorIterator.next();
@@ -190,7 +192,7 @@ public class ProfileReport {
         StringBuilder builder = new StringBuilder();
         ArrayList<Measure> customMeasures = measureController.getCustomMeasures();
         String headers[] = {"Measure", "Measure Type"};
-        builder.append(generateTableHeader(("Custom Measures (total = " + customMeasures.size() + ")"), headers));
+        builder.append(htmlHelper.generateTableHeader(("Custom Measures (total = " + customMeasures.size() + ")"), headers));
 
         for (Iterator<Measure> measureIterator = customMeasures.iterator(); measureIterator.hasNext(); ) {
             Measure measure = measureIterator.next();
@@ -208,7 +210,7 @@ public class ProfileReport {
         StringBuilder builder = new StringBuilder();
         ArrayList<Measure> customMeasures = measureController.getMeasuresOfType(true, type);
         String headers[] = {"Measure", "Measure Type"};
-        builder.append(generateTableHeader((type + "Custom Measures (total = " + customMeasures.size() + ")"), headers));
+        builder.append(htmlHelper.generateTableHeader((type + "Custom Measures (total = " + customMeasures.size() + ")"), headers));
 
         for (Iterator<Measure> measureIterator = customMeasures.iterator(); measureIterator.hasNext(); ) {
             Measure measure = measureIterator.next();
@@ -243,7 +245,7 @@ public class ProfileReport {
     {
         StringBuilder builder = new StringBuilder();
         String headers[] = {"Application"};
-        builder.append(generateTableHeader(("Applications"), headers));
+        builder.append(htmlHelper.generateTableHeader(("Applications"), headers));
         ArrayList<Application> applications = uemConfigurationController.getApplications();
         int i = 1;
 
@@ -257,28 +259,14 @@ public class ProfileReport {
     }
 
 
-    private String generateTableHeader(String title, String[] headers)
-    {
-        StringBuilder builder = new StringBuilder();
 
-        builder.append("<b>" + title + "</b><br>");
-        builder.append("<table style=\"width:100%;border-style:1px solid black\">");
-        if(headers.length>0) {
-            builder.append("<tr>");
-            for (int i = 0; i < headers.length; i++) {
-                builder.append("<th>" + headers[i] + "</th>");
-            }
-            builder.append("</tr>");
-        }
-        return builder.toString();
-    }
 
     private String generateMeasureTable(ArrayList<Measure> measuresToList, String title)
     {
         StringBuilder builder = new StringBuilder();
         int i = 1;
         String headers[] = {"Measure", "Measure Type"};
-        builder.append(generateTableHeader((title + " (total = " + measuresToList.size() + ")"), headers));
+        builder.append(htmlHelper.generateTableHeader((title + " (total = " + measuresToList.size() + ")"), headers));
 
         for (Iterator<Measure> measureIterator = measuresToList.iterator(); measureIterator.hasNext(); ) {
             Measure measure = measureIterator.next();
@@ -319,20 +307,5 @@ public class ProfileReport {
         return builder.toString();
     }
 
-    private String generateReportHeader(String profileName, String profileDescription)
-    {
-        String returnVal = "<!DOCTYPE html>\n" +
-                "<html>\n" +
-                "<body>\n";
-        returnVal += "<h1>" + profileName + "</h1>";
-        return returnVal;
-    }
 
-    private String generateReportFooter()
-    {
-        String returnVal = "</body>\n" +
-                "</html>";
-
-        return returnVal;
-    }
 }

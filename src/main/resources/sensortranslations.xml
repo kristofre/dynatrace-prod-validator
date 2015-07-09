@@ -24,6 +24,7 @@
         <sensor id="com.dynatrace.diagnostics.knowledgesensor.java.rmi" name="RMI" tech="java"/>
         <sensor id="com.dynatrace.diagnostics.knowledgesensor.java.jbossesbtagging" name="Jboss ESB Tagging" tech="java" />
         <sensor id="com.dynatrace.diagnostics.knowledgesensor.java.jta" name="JTA" tech="java"/>
+        <sensor id="com.dynatrace.diagnostics.knowledgesensor.java.servlet" name="Servlet" tech="java"/>
         <sensor id="com.dynatrace.diagnostics.knowledgesensor.java.elasticsearch" name="Elastic Search" tech="java"/>
         <sensor id="com.dynatrace.diagnostics.knowledgesensor.java.rmitagging" name="RMI Tagging" tech="java"/>
         <sensor id="com.dynatrace.diagnostics.knowledgesensor.java.xa" name="XA" tech="java"/>
@@ -86,7 +87,10 @@
         <sensor id="com.dynatrace.diagnostics.knowledgesensor.adk" name="ADK" tech="sdk"/>
         <sensor id="com.dynatrace.diagnostics.knowledgesensor.cics" name="CICS" tech="CICS"/>
         <sensor id="com.dynatrace.diagnostics.knowledgesensor.js.prototype" name="JavaScript - Prototype" tech="Javascript"/>
-        <sensor id="com.dynatrace.diagnostics.knowledgesensor.euem.webserver" name="Web Server" tech="webserver"/>
+        <sensor id="com.dynatrace.diagnostics.knowledgesensor.euem.webserver" name="Web Server" tech="webserver">
+            <property name="attribute" type="string" operator="!=" value="" />
+            <property name="attribute" type="string" operator="!=" value="*" />
+        </sensor>
         <sensor id="com.dynatrace.diagnostics.knowledgesensor.ims" name="IMS" tech="IMS"/>
         <sensor id="com.dynatrace.diagnostics.knowledgesensor.dotnet.tests" name=".NET Tests" tech="dotnet"/>
         <sensor id="com.dynatrace.diagnostics.knowledgesensor.js.perceivedrendertime" name="JavaScript - Perceived Render Time" tech="Javascript"/>
