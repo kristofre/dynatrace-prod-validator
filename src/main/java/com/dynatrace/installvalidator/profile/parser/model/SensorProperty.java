@@ -6,11 +6,11 @@ import javax.xml.bind.annotation.XmlAnyAttribute;
 
 public class SensorProperty {
 	
-	private Map<String,String> attributes;
+	private HashMap<String,String> attributes;
     
 
     @XmlAnyAttribute
-    public Map<String,String> getAttributes(){
+    public HashMap<String,String> getAttributes(){
         if( attributes == null ){
         	attributes = new HashMap<String,String>();
         }

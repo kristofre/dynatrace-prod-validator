@@ -11,9 +11,9 @@
         <sensor id="com.dynatrace.diagnostics.knowledgesensor.java.ejb" name="EJB" tech="java"/>
         <sensor id="com.dynatrace.diagnostics.knowledgesensor.java.nosql.cassandra.tagging" name="Cassandra Tagging" tech="java"/>
         <sensor id="com.dynatrace.diagnostics.knowledgesensor.java.jdbc" name="JDBC" tech="java">
-            <property name="aggregate" type="boolean" operator="=" value="true" />
-            <property name="capturebindvalues" type="boolean" operator="=" value="false" />
-            <property name="maxsqlstringlength" type="integer" operator="lt" value="1024" />
+            <property propertytype="aggregate" name="aggregate" datatype="boolean" operator="=" value="true" />
+            <property propertytype="capturebindvalues" name="capturebindvalues" datatype="boolean" operator="=" value="false" />
+            <property propertytype="maxsqlstringlength" name="maxsqlstringlength" datatype="integer" operator="lt" value="1024" />
         </sensor>
         <sensor id="com.dynatrace.diagnostics.knowledgesensor.java.jndi" name="JNDI" tech="java"/>
         <sensor id="com.dynatrace.diagnostics.knowledgesensor.java.nosql.mongodb" name="MongoDB" tech="java"/>
@@ -24,7 +24,9 @@
         <sensor id="com.dynatrace.diagnostics.knowledgesensor.java.rmi" name="RMI" tech="java"/>
         <sensor id="com.dynatrace.diagnostics.knowledgesensor.java.jbossesbtagging" name="Jboss ESB Tagging" tech="java" />
         <sensor id="com.dynatrace.diagnostics.knowledgesensor.java.jta" name="JTA" tech="java"/>
-        <sensor id="com.dynatrace.diagnostics.knowledgesensor.java.servlet" name="Servlet" tech="java"/>
+        <sensor id="com.dynatrace.diagnostics.knowledgesensor.java.servlet" name="Servlet" tech="java">
+            <property propertytype="type" propertytypeval="uriquery" name="uri" datatype="string" operator="!=" value="/ccsi/tariffPacketBalanceQuery.do" />
+        </sensor>
         <sensor id="com.dynatrace.diagnostics.knowledgesensor.java.elasticsearch" name="Elastic Search" tech="java"/>
         <sensor id="com.dynatrace.diagnostics.knowledgesensor.java.rmitagging" name="RMI Tagging" tech="java"/>
         <sensor id="com.dynatrace.diagnostics.knowledgesensor.java.xa" name="XA" tech="java"/>
@@ -54,9 +56,9 @@
         <sensor id="com.dynatrace.diagnostics.knowledgesensor.dotnet.mqseries" name=".NET MQ Series" tech="dotnet"/>
         <sensor id="com.dynatrace.diagnostics.knowledgesensor.java.memory" name="Java Memory" tech="java"/>
         <sensor id="com.dynatrace.diagnostics.knowledgesensor.dotnet.adonet" name="ADO .NET" tech="dotnet">
-            <property name="aggregate" type="boolean" operator="=" value="true" />
-            <property name="capturebindvalues" type="boolean" operator="=" value="true" />
-            <property name="maxsqlstringlength" type="integer" operator="lt" value="1024" />
+            <property propertytype="aggregate" name="aggregate" datatype="boolean" operator="=" value="true" />
+            <property propertytype="capturebindvalues" name="capturebindvalues"  datatype="boolean" operator="=" value="true" />
+            <property propertytype="maxsqlstringlength" name="maxsqlstringlength" datatype="integer" operator="lt" value="1024" />
         </sensor>
         <sensor id="com.dynatrace.diagnostics.knowledgesensor.dotnet.httptagging" name=".NET HTTP Tagging" tech="dotnet"/>
         <sensor id="com.dynatrace.diagnostics.knowledgesensor.dotnet.exception" name=".NET Exception" tech="dotnet"/>
@@ -88,8 +90,8 @@
         <sensor id="com.dynatrace.diagnostics.knowledgesensor.cics" name="CICS" tech="CICS"/>
         <sensor id="com.dynatrace.diagnostics.knowledgesensor.js.prototype" name="JavaScript - Prototype" tech="Javascript"/>
         <sensor id="com.dynatrace.diagnostics.knowledgesensor.euem.webserver" name="Web Server" tech="webserver">
-            <property name="attribute" type="string" operator="!=" value="" />
-            <property name="attribute" type="string" operator="!=" value="*" />
+            <property propertytype="type" propertytypeval="attribute" name="name" datatype="string" operator="!=" value="" />
+            <property propertytype="type" propertytypeval="attribute" name="name" datatype="string" operator="!=" value="*" />
         </sensor>
         <sensor id="com.dynatrace.diagnostics.knowledgesensor.ims" name="IMS" tech="IMS"/>
         <sensor id="com.dynatrace.diagnostics.knowledgesensor.dotnet.tests" name=".NET Tests" tech="dotnet"/>

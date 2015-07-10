@@ -12,7 +12,7 @@ public class SensorDetail {
     private String name;
     private String tech;
     private Boolean defaultHide;
-    private ArrayList<SensorProperty> sensorProperties;
+    private ArrayList<SensorValidationProperty> sensorProperties;
 
     public String getId() {
         return id;
@@ -46,12 +46,12 @@ public class SensorDetail {
         this.defaultHide = defaultHide;
     }
 
-    public ArrayList<SensorProperty> getSensorProperties() {
+    public ArrayList<SensorValidationProperty> getSensorProperties() {
         return sensorProperties;
     }
 
     @XmlElement(name = "property")
-    public void setSensorProperties(ArrayList<SensorProperty> sensorProperties) {
+    public void setSensorProperties(ArrayList<SensorValidationProperty> sensorProperties) {
         this.sensorProperties = sensorProperties;
     }
 }

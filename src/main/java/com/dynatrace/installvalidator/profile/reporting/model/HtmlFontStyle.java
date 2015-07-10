@@ -1,4 +1,4 @@
-package com.dynatrace.installvalidator.profile.reporting;
+package com.dynatrace.installvalidator.profile.reporting.model;
 
 /**
  * Created by kristof on 07.07.15.

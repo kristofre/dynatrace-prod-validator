@@ -2,16 +2,12 @@ package com.dynatrace.installvalidator.profile.validator;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
 
-import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
-import javax.xml.bind.Unmarshaller;
 
-import com.dynatrace.installvalidator.profile.parser.model.AgentGroup;
-import com.dynatrace.installvalidator.profile.parser.model.Dynatrace;
 import com.dynatrace.installvalidator.profile.parser.model.SystemProfile;
-import com.dynatrace.installvalidator.profile.reporting.HtmlProfileReport;
+import com.dynatrace.installvalidator.profile.parser.repository.ProfileRepository;
+import com.dynatrace.installvalidator.profile.reporting.generator.HtmlProfileReport;
 import org.apache.commons.cli.*;
 
 /**
@@ -53,22 +49,9 @@ public class ProfileValidator
 	private static void processProfile(String inputFile, String outputFile)
 	{
 		try {
-			JAXBContext jaxbContext = JAXBContext.newInstance(Dynatrace.class);
-			Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
+			ProfileRepository profileRepository = new ProfileRepository();
 			File XMLfile = new File(inputFile);
-
-			Dynatrace dtProfile = (Dynatrace) jaxbUnmarshaller.unmarshal(XMLfile);
-			SystemProfile profile = dtProfile.getSystemProfile();
-			//System.out.println("Profile Description: " + profile.getDescription());
-
-
-			ArrayList<AgentGroup> agentGroups = profile.getAgentGroups();
-
-			for (AgentGroup group:agentGroups)
-			{
-				//System.out.println("Group Name: " + group.getId());
-			}
-
+			SystemProfile profile = profileRepository.getSystemProfile(XMLfile);
 			String profileName = XMLfile.getName().substring(0, XMLfile.getName().indexOf(".profile.xml"));
 
 			HtmlProfileReport report = new HtmlProfileReport(profile);
@@ -79,10 +62,7 @@ public class ProfileValidator
 			}
 			report.createReport(profile, profileName, outputFile);
 
-		} catch (JAXBException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
+		}  catch (IOException e) {
 			e.printStackTrace();
 		}
 	}

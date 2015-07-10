@@ -1,4 +1,4 @@
-package com.dynatrace.installvalidator.profile.reporting;
+package com.dynatrace.installvalidator.profile.reporting.model;
 
 /**
  * Created by kristof on 07.07.15.
@@ -40,9 +40,9 @@ public class HtmlHelper {
         StringBuilder builder = new StringBuilder();
 
         builder.append("<b>" + title + "</b><br>");
-        builder.append("<table style=\"width:100%;border-style:1px solid black\">");
+        builder.append("<table style=\"width:100%;border:1px solid black\">");
         if(headers.length>0) {
-            builder.append("<tr>");
+            builder.append("<tr style=\"border:1px solid black\">");
             for (int i = 0; i < headers.length; i++) {
                 builder.append("<th>" + headers[i] + "</th>");
             }

@@ -1,5 +1,6 @@
-package com.dynatrace.installvalidator.profile.reporting;
+package com.dynatrace.installvalidator.profile.reporting.generator;
 
+import com.dynatrace.installvalidator.profile.library.model.*;
 import com.dynatrace.installvalidator.profile.parser.controller.*;
 import com.dynatrace.installvalidator.profile.library.controller.SensorLibraryController;
 import com.dynatrace.installvalidator.profile.parser.model.*;
@@ -9,8 +10,10 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.*;
 
+import com.dynatrace.installvalidator.profile.reporting.model.HtmlHelper;
 import com.dynatrace.installvalidator.profile.validator.controller.SensorConfigValidator;
 import com.dynatrace.installvalidator.profile.validator.model.ValidationResult;
+import com.sun.xml.internal.ws.developer.MemberSubmissionAddressing;
 import org.apache.commons.lang.StringEscapeUtils;
 
 /**
@@ -133,23 +136,44 @@ public class HtmlProfileReport {
                     ArrayList<String> activeTech = profileController.getActiveTechnologies();
                     if (activeTech.contains(sensorGroupController.getSensorTech(sensorId)) && sensorGroupController.displaySensor(sensorId))
                     {
-                        ArrayList<Map<String, String>> properties = sensorConfigurationController.getPropertiesForSensor(agentGroup.getId(), sensorId);
+                        ArrayList<HashMap<String, String>> properties = sensorConfigurationController.getPropertiesForSensor(agentGroup.getId(), sensorId);
+                        ArrayList<SensorValidationProperty> validationRules = sensorLibraryController.getSensorPropertiesForSensor(sensorId);
                         StringBuilder props = new StringBuilder();
-                        for (Iterator<Map<String, String>> iterator = properties.iterator(); iterator.hasNext(); ) {
-                            Map<String, String> next = iterator.next();
+
+                        ValidationResult result = sensorConfigValidator.validateSensorConfig(properties, validationRules);
+                        if(!result.isValid()){
+                            String test;
+                        }
+                        for (Iterator<HashMap<String, String>> iterator = properties.iterator(); iterator.hasNext(); ) {
+                            HashMap<String, String> next = iterator.next();
                             Iterator it = next.entrySet().iterator();
+
+                            //ValidationResult curRes = sensorConfigValidator.validateSensorConfigProperty(next, validationRules);
+                            //if(!curRes.isValid()) System.out.println(curRes);
+                            //if(curRes.isValid()) props.append("<div>[" + StringEscapeUtils.escapeHtml(pair.getKey().toString()) + " : " + StringEscapeUtils.escapeHtml(pair.getValue().toString()) + "] </div>");
+
+                            //else props.append("<div style=\"color:red;\">[" + StringEscapeUtils.escapeHtml(pair.getKey().toString()) + " : " + StringEscapeUtils.escapeHtml(pair.getValue().toString()) + "] -- REASON: [" + res.toString() + "]</div>");
                             while (it.hasNext())
                             {
                                 Map.Entry pair = (Map.Entry)it.next();
-                                com.dynatrace.installvalidator.profile.library.model.SensorProperty sensorProperty = sensorLibraryController.getSensorPropertyForSensorAndProperty(sensorId, pair.getKey().toString());
+                                String sensorProperty = pair.getKey().toString();
+                                String sensorValue = pair.getValue().toString();
+
+                                ValidationResult res = sensorConfigValidator.validateSensorConfigProperty(next, validationRules);
+                                if(!res.isValid()) System.out.println(res);
+
+                                /*ArrayList<SensorValidationProperty> valRules = sensorLibraryController.getSensorPropertiesForSensorAndProperty(sensorId, sensorProperty);
                                 ValidationResult res = new ValidationResult();
-                                if(sensorProperty != null)
+                                if(valRules.size()>0)
                                 {
-                                    res = sensorConfigValidator.validateSensorConfig(pair.getKey().toString(), pair.getValue().toString(), sensorProperty);
-                                    System.out.println(res);
-                                }
+                                    res = sensorConfigValidator.validateSensorConfig(sensorProperty, sensorValue, valRules);
+                                    if(!res.isValid()) System.out.println(res);
+                                }*/
+
                                 if(res.isValid()) props.append("<div>[" + StringEscapeUtils.escapeHtml(pair.getKey().toString()) + " : " + StringEscapeUtils.escapeHtml(pair.getValue().toString()) + "] </div>");
-                                else props.append("<div style=\"color:red;\">[" + StringEscapeUtils.escapeHtml(pair.getKey().toString()) + " : " + StringEscapeUtils.escapeHtml(pair.getValue().toString()) + "] </div>");
+
+                                else props.append("<div style=\"color:red;\">[" + StringEscapeUtils.escapeHtml(pair.getKey().toString()) + " : " + StringEscapeUtils.escapeHtml(pair.getValue().toString()) + "] -- REASON: [" + res.toString() +"]</div>");
+
                             }
                             props.append("<br>");
                         }
@@ -251,7 +275,7 @@ public class HtmlProfileReport {
 
         for (Iterator<Application> applicationIterator = applications.iterator(); applicationIterator.hasNext(); ) {
             Application application = applicationIterator.next();
-            builder.append("<tr>\n<td>" + i + " : " + application.getName() + "</td></tr>");
+            builder.append("<tr style=\"border:1px solid black\">\n<td style=\"border:1px solid black\">" + i + " : " + application.getName() + "</td></tr>");
             i++;
         }
         builder.append(generateTableFooter());
@@ -288,9 +312,9 @@ public class HtmlProfileReport {
     private String generateTableRow(String[] values)
     {
         StringBuilder builder = new StringBuilder();
-        builder.append("<tr>");
+        builder.append("<tr style=\"border:1px solid black\">");
         for (int i = 0; i < values.length; i++) {
-            builder.append("<td>"+StringEscapeUtils.escapeHtml(values[i])+"</td>");
+            builder.append("<td style=\"border:1px solid black\">"+StringEscapeUtils.escapeHtml(values[i])+"</td>");
         }
         builder.append("</tr>\n");
         return builder.toString();
@@ -299,9 +323,9 @@ public class HtmlProfileReport {
     private String generateTableRowAlreadyEscapedData(String[] values)
     {
         StringBuilder builder = new StringBuilder();
-        builder.append("<tr>");
+        builder.append("<tr style=\"border:1px solid black\">");
         for (int i = 0; i < values.length; i++) {
-            builder.append("<td>"+(values[i])+"</td>");
+            builder.append("<td style=\"border:1px solid black\">"+(values[i])+"</td>");
         }
         builder.append("</tr>\n");
         return builder.toString();

@@ -3,6 +3,7 @@ package com.dynatrace.installvalidator.profile.parser.controller;
 import com.dynatrace.installvalidator.profile.parser.model.*;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
@@ -14,7 +15,7 @@ public class SensorConfigurationController extends BaseController {
         super(profile);
     }
 
-    public ArrayList<Map<String, String>> getPropertiesForSensor(String agentGroup, String fullSensorName)
+    public ArrayList<HashMap<String, String>> getPropertiesForSensor(String agentGroup, String fullSensorName)
     {
         Configuration activeConfiguration = getActiveConfiguration();
         if(activeConfiguration.getSensorConfigurations()!=null) {
@@ -28,7 +29,7 @@ public class SensorConfigurationController extends BaseController {
                         AgentSensorConfig agentSensorConfig = agentSensorConfigIterator.next();
                         if(agentSensorConfig.getId().equals(fullSensorName))
                         {
-                            ArrayList<Map<String, String>> props = new ArrayList<Map<String, String>>();
+                            ArrayList<HashMap<String, String>> props = new ArrayList<HashMap<String, String>>();
                             ArrayList<SensorProperty> sensorProperties = agentSensorConfig.getProperties();
                             if (sensorProperties != null) {
                                 for (Iterator<SensorProperty> sensorPropertyIterator = sensorProperties.iterator(); sensorPropertyIterator.hasNext(); ) {
@@ -42,7 +43,7 @@ public class SensorConfigurationController extends BaseController {
                 }
             }
         }
-        return new ArrayList<Map<String, String>>();
+        return new ArrayList<HashMap<String, String>>();
     }
 
     public Configuration getActiveConfiguration()
