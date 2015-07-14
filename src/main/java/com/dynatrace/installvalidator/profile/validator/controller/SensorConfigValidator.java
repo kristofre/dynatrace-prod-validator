@@ -30,7 +30,7 @@ public class SensorConfigValidator implements IValidator{
                 result.setIsValid(isValid);
                 String message = "Sensor Configuration for property [" + property + "] with a value of [" + value +
                     "] is unhealthy. The recommended value: [" + validationHelper.translateOperator(validationRules.getOperator()) +
-                    " " + validationRules.getValue() + "]";
+                    " \"" + validationRules.getValue() + "\"]";
                 result.addValidationError(new ValidationError(message));
             }
         }
@@ -45,11 +45,11 @@ public class SensorConfigValidator implements IValidator{
             if (next.getName().equals(property))
             {
                 boolean isValid = validationHelper.validate(value, next.getDatatype(), next.getOperator(), next.getValue());
-                result.setIsValid(isValid);
                 if(!isValid){
+                    result.setIsValid(false);
                     String message = "Sensor Configuration for property [" + property + "] with a value of [" + value +
                             "] is unhealthy. The recommended value: [" + validationHelper.translateOperator(next.getOperator()) +
-                            " " + next.getValue() + "]";
+                            " \"" + next.getValue() + "\"]";
                     ValidationError error = new ValidationError(message);
                     result.addValidationError(error);
                 }
@@ -135,23 +135,59 @@ public class SensorConfigValidator implements IValidator{
                     // do a type check
                     if(propTypeVal.equals(curPropTypeVal))
                     {
-                        ValidationError error = validatePropertySet(next, properties);
+                        /*ValidationError error = validatePropertySet(next, properties);
                         if (error != null) {
                             result.setIsValid(false);
                             result.addValidationError(error);
+                        }*/
+
+                        if(properties.containsKey(new QName("", partProperty, "")))
+                        {
+                            if(next.getName().equals(partProperty))
+                            {
+                                String valueToCheck = properties.get(new QName("", partProperty, ""));
+                                ValidationResult tempRes = validateSensorConfig(partProperty, valueToCheck, validationProperties);
+                                if(tempRes.isValid()==false) {
+                                    result.setIsValid(tempRes.isValid());
+                                    result = result.merge(tempRes);
+
+
+                                }
+
+                                return result;
+                            }
+
+
+
                         }
+
                     }
                 }
                 else
                 {
-                    ValidationError error = validatePropertySet(next, properties);
-                    if (error != null) {
-                        result.setIsValid(false);
-                        result.addValidationError(error);
+                    if(properties.containsKey(new QName("", partProperty, "")))
+                    {
+                        if(next.getName().equals(partProperty))
+                        {
+                            String valueToCheck = properties.get(new QName("", partProperty, ""));
+                            ValidationResult tempRes = validateSensorConfig(partProperty, valueToCheck, validationProperties);
+                            if(tempRes.isValid()==false) {
+                                result.setIsValid(tempRes.isValid());
+
+                                result = result.merge(tempRes);
+
+                            }
+
+                            return result;
+                        }
+
+
+
                     }
                 }
             }
         }
+
         return result;
     }
 

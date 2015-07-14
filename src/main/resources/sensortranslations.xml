@@ -26,6 +26,8 @@
         <sensor id="com.dynatrace.diagnostics.knowledgesensor.java.jta" name="JTA" tech="java"/>
         <sensor id="com.dynatrace.diagnostics.knowledgesensor.java.servlet" name="Servlet" tech="java">
             <property propertytype="type" propertytypeval="uriquery" name="uri" datatype="string" operator="!=" value="/ccsi/tariffPacketBalanceQuery.do" />
+            <property propertytype="type" propertytypeval="attribute" name="name" datatype="string" operator="!=" value="" />
+            <property propertytype="type" propertytypeval="attribute" name="name" datatype="string" operator="!=" value="*" />
         </sensor>
         <sensor id="com.dynatrace.diagnostics.knowledgesensor.java.elasticsearch" name="Elastic Search" tech="java"/>
         <sensor id="com.dynatrace.diagnostics.knowledgesensor.java.rmitagging" name="RMI Tagging" tech="java"/>
@@ -36,28 +38,34 @@
         <sensor id="com.dynatrace.diagnostics.knowledgesensor.dotnet.amqp" name=".NET Active MQ" tech="dotnet"/>
         <sensor id="com.dynatrace.diagnostics.knowledgesensor.java.webservice" name="Java Web Services" tech="java"/>
         <sensor id="com.dynatrace.diagnostics.knowledgesensor.java.amqpreceiveentry" name="Java Active MQ Receive Entry Point" tech="java"/>
-        <sensor id="com.dynatrace.diagnostics.knowledgesensor.java.jms" name="JMS" tech="java"/>
+        <sensor id="com.dynatrace.diagnostics.knowledgesensor.java.jms" name="JMS" tech="java">
+            <property propertytype="capturecontents" name="capturecontents" datatype="boolean" operator="=" value="false" />
+        </sensor>
         <sensor id="com.dynatrace.diagnostics.knowledgesensor.dotnet.amqpreceiveentry" name=".NET Active MQ Receive Entry Point" tech="dotnet"/>
-        <sensor id="com.dynatrace.diagnostics.knowledgesensor.java.tibcotagging" name="Tibco Tagging" tech="java"/>
+        <sensor id="com.dynatrace.diagnostics.knowledgesensor.java.tibcotagging" name="Tibco Tagging" tech="java" defaulthide="true"/>
         <sensor id="com.dynatrace.diagnostics.knowledgesensor.dotnet.wpf"  name="WPF" tech="dotnet"/>
         <sensor id="com.dynatrace.diagnostics.knowledgesensor.java.mqseries" name="MQ Series" tech="java"/>
         <sensor id="com.dynatrace.diagnostics.knowledgesensor.java.hadoop"  name="Hadoop" tech="java"/>
         <sensor id="com.dynatrace.diagnostics.knowledgesensor.java.threadstart" name="Thread Start" tech="java"/>
-        <sensor id="com.dynatrace.diagnostics.knowledgesensor.java.tibco" name="Tibco" tech="java"/>
+        <sensor id="com.dynatrace.diagnostics.knowledgesensor.java.tibco" name="Tibco Messaging" tech="java"/>
         <sensor id="com.dynatrace.diagnostics.knowledgesensor.java.jmstagging" name="JMS Tagging" tech="java"/>
         <sensor id="com.dynatrace.diagnostics.knowledgesensor.dotnet.winforms" name=".NET Win Forms" tech="dotnet"/>
         <sensor id="com.dynatrace.diagnostics.knowledgesensor.dotnet.messaging" name=".NET Messaging" tech="dotnet"/>
-        <sensor id="com.dynatrace.diagnostics.knowledgesensor.java.exception" name="Java Exception" tech="java"/>
+        <sensor id="com.dynatrace.diagnostics.knowledgesensor.java.exception" name="Java Exception" tech="java">
+            <property propertytype="propertytype" propertytypeval="settings" name="aggregate" datatype="boolean" operator="=" value="true" />
+            <property propertytype="propertytype" propertytypeval="settings" name="includestacktrace" datatype="boolean" operator="=" value="false" />
+            <property propertytype="propertytype" propertytypeval="settings" name="maxstacktracedepth" datatype="integer" operator="lt" value="4" />
+        </sensor>
         <sensor id="com.dynatrace.diagnostics.knowledgesensor.dotnet.heap" name=".NET Heap" tech="dotnet"/>
         <sensor id="com.dynatrace.diagnostics.knowledgesensor.dotnet.disableinlining" name=".NET Disable Inlining" tech="dotnet"/>
         <sensor id="com.dynatrace.diagnostics.knowledgesensor.dotnet.threadtagging" name=".NET Thread Tagging" tech="dotnet"/>
         <sensor id="com.dynatrace.diagnostics.knowledgesensor.dotnet.webservicetagging" name=".NET Web Service Tagging" tech="dotnet"/>
         <sensor id="com.dynatrace.diagnostics.knowledgesensor.java.awt" name="AWT" tech="java" />
         <sensor id="com.dynatrace.diagnostics.knowledgesensor.dotnet.mqseries" name=".NET MQ Series" tech="dotnet"/>
-        <sensor id="com.dynatrace.diagnostics.knowledgesensor.java.memory" name="Java Memory" tech="java"/>
+        <sensor id="com.dynatrace.diagnostics.knowledgesensor.java.memory" name="Java Memory" tech="java" defaulthide="true"/>
         <sensor id="com.dynatrace.diagnostics.knowledgesensor.dotnet.adonet" name="ADO .NET" tech="dotnet">
             <property propertytype="aggregate" name="aggregate" datatype="boolean" operator="=" value="true" />
-            <property propertytype="capturebindvalues" name="capturebindvalues"  datatype="boolean" operator="=" value="true" />
+            <property propertytype="capturebindvalues" name="capturebindvalues"  datatype="boolean" operator="=" value="false" />
             <property propertytype="maxsqlstringlength" name="maxsqlstringlength" datatype="integer" operator="lt" value="1024" />
         </sensor>
         <sensor id="com.dynatrace.diagnostics.knowledgesensor.dotnet.httptagging" name=".NET HTTP Tagging" tech="dotnet"/>
@@ -70,7 +78,10 @@
         <sensor id="com.dynatrace.diagnostics.knowledgesensor.dotnet.tagging" name=".NET Tagging" tech="dotnet"/>
         <sensor id="com.dynatrace.diagnostics.knowledgesensor.dotnet.messagingreceiveentrypoint" name=".NET Messaging Receive Entry Point" tech="dotnet"/>
         <sensor id="com.dynatrace.diagnostics.knowledgesensor.java.jmsreceiveentry" name="JMS Receive Entry Point" tech="java"/>
-        <sensor id="com.dynatrace.diagnostics.knowledgesensor.dotnet.aspnet" name="ASP.NET" tech="dotnet"/>
+        <sensor id="com.dynatrace.diagnostics.knowledgesensor.dotnet.aspnet" name="ASP.NET" tech="dotnet">
+            <property propertytype="type" propertytypeval="attribute" name="name" datatype="string" operator="!=" value="" />
+            <property propertytype="type" propertytypeval="attribute" name="name" datatype="string" operator="!=" value="*" />
+        </sensor>
         <sensor id="com.dynatrace.diagnostics.knowledgesensor.dotnet.logging" name=".NET Logging" tech="dotnet"/>
         <sensor id="com.dynatrace.diagnostics.knowledgesensor.dotnet.mqseriesreceiveentrypoint" name=".NET MQ Series Receive Entry Point" tech="dotnet"/>
         <sensor id="com.dynatrace.diagnostics.knowledgesensor.java.mqseriesreceiveentry" name="Java MQ Series Receive Entry Point" tech="java"/>

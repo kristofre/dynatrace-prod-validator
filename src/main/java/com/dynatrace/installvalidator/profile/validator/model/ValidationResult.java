@@ -1,5 +1,7 @@
 package com.dynatrace.installvalidator.profile.validator.model;
 
+import com.sun.xml.internal.ws.developer.MemberSubmissionAddressing;
+
 import java.util.ArrayList;
 import java.util.Iterator;
 
@@ -45,5 +47,18 @@ public class ValidationResult {
             returnVal += next.getValidationMessage() + "\n";
         }
         return returnVal;
+    }
+
+    public ValidationResult merge(ValidationResult toMerge)
+    {
+        ArrayList<ValidationError> errorsToMerge = toMerge.getValidationErrors();
+        if(errorsToMerge!=null)
+        {
+            for (Iterator<ValidationError> validationErrorIterator = errorsToMerge.iterator(); validationErrorIterator.hasNext(); ) {
+                ValidationError next = validationErrorIterator.next();
+                this.addValidationError(next);
+            }
+        }
+        return this;
     }
 }

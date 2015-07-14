@@ -1,5 +1,7 @@
 package com.dynatrace.installvalidator.profile.reporting.model;
 
+import org.apache.commons.lang.StringEscapeUtils;
+
 /**
  * Created by kristof on 07.07.15.
  */
@@ -35,11 +37,19 @@ public class HtmlHelper {
         return generateTableHeader(title, headers);
     }
 
+    public String generateSectionHeader(String title)
+    {
+        StringBuilder builder = new StringBuilder();
+
+        builder.append("<h2 id=" + StringEscapeUtils.escapeHtml(title).replace(" ", "_") + ">" +title + "</h2><br>");
+        return builder.toString();
+    }
+
     public String generateTableHeader(String title, String[] headers)
     {
         StringBuilder builder = new StringBuilder();
 
-        builder.append("<b>" + title + "</b><br>");
+        builder.append("<b>" + ">" +title + "</b><br>");
         builder.append("<table style=\"width:100%;border:1px solid black\">");
         if(headers.length>0) {
             builder.append("<tr style=\"border:1px solid black\">");

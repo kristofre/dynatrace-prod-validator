@@ -51,12 +51,22 @@ public class HtmlProfileReport {
 
         html.append(htmlHelper.generateReportHeader(profileName, profile.getDescription()));
 
-        html.append(generateAgentGroupLists(profile.getAgentGroups()));
+        ArrayList<String> sectionTitles = new ArrayList<String>();
+        String sectionApplications = "Applications";
+        String sectionAgentGroups = "Agent Groups";
+        sectionTitles.add(sectionApplications);
+        sectionTitles.add(sectionAgentGroups);
+
+        html.append(generateSectionList(sectionTitles));
+
+        html.append(generateApplicationTable(sectionApplications));
+
+        html.append(generateAgentGroupLists(sectionAgentGroups));
         html.append(generateCustomMeasuresList());
         html.append(generateRegexMeasuresList());
         html.append(generateAgentSplitMeasuresList());
         html.append(generateAppSplitMeasuresList());
-        html.append(generateApplicationTable());
+
         html.append(generateSensorGroupList());
 
         html.append(generateMeasureListOfType("JdbcMeasure"));
@@ -69,6 +79,17 @@ public class HtmlProfileReport {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    private String generateSectionList(ArrayList<String> sectionTitles)
+    {
+        StringBuilder builder = new StringBuilder();
+
+        for (Iterator<String> iterator = sectionTitles.iterator(); iterator.hasNext(); ) {
+            String next = iterator.next();
+            builder.append("<a href=#" + StringEscapeUtils.escapeHtml(next).replace(" ", "_") + ">" + next + "</a></br>");
+        }
+        return builder.toString();
     }
 
     private String generateSensorGroupList()
@@ -114,13 +135,20 @@ public class HtmlProfileReport {
 
     private String generateTextToDisplayOnEmptyMethodRule(String methodPattern)
     {
-        if (methodPattern.isEmpty()) return "ALL METHODS";
+        if (methodPattern.isEmpty()) return "<all methods>(*)";
         return methodPattern;
     }
 
-    private String generateAgentGroupLists(ArrayList<AgentGroup> agentGroups)
+    private String generateBusinessTransactionList(String sectionTitle)
     {
+        return "";
+    }
+
+    private String generateAgentGroupLists(String sectionTitle)
+    {
+        ArrayList<AgentGroup> agentGroups = profile.getAgentGroups();
         StringBuilder builder = new StringBuilder();
+        builder.append(htmlHelper.generateSectionHeader(sectionTitle));
         int i = 1;
         String headers[] = {"Sensor Name", "Sensor Properties"};
         for (Iterator<AgentGroup> agentGroupIterator = agentGroups.iterator(); agentGroupIterator.hasNext(); ) {
@@ -148,27 +176,15 @@ public class HtmlProfileReport {
                             HashMap<String, String> next = iterator.next();
                             Iterator it = next.entrySet().iterator();
 
-                            //ValidationResult curRes = sensorConfigValidator.validateSensorConfigProperty(next, validationRules);
-                            //if(!curRes.isValid()) System.out.println(curRes);
-                            //if(curRes.isValid()) props.append("<div>[" + StringEscapeUtils.escapeHtml(pair.getKey().toString()) + " : " + StringEscapeUtils.escapeHtml(pair.getValue().toString()) + "] </div>");
-
-                            //else props.append("<div style=\"color:red;\">[" + StringEscapeUtils.escapeHtml(pair.getKey().toString()) + " : " + StringEscapeUtils.escapeHtml(pair.getValue().toString()) + "] -- REASON: [" + res.toString() + "]</div>");
                             while (it.hasNext())
                             {
                                 Map.Entry pair = (Map.Entry)it.next();
                                 String sensorProperty = pair.getKey().toString();
                                 String sensorValue = pair.getValue().toString();
 
-                                ValidationResult res = sensorConfigValidator.validateSensorConfigProperty(next, validationRules);
+                                //ValidationResult res = sensorConfigValidator.validateSensorConfigProperty(next, validationRules);
+                                ValidationResult res = sensorConfigValidator.validateSensorConfigForParticularProperty(next, validationRules, sensorProperty);
                                 if(!res.isValid()) System.out.println(res);
-
-                                /*ArrayList<SensorValidationProperty> valRules = sensorLibraryController.getSensorPropertiesForSensorAndProperty(sensorId, sensorProperty);
-                                ValidationResult res = new ValidationResult();
-                                if(valRules.size()>0)
-                                {
-                                    res = sensorConfigValidator.validateSensorConfig(sensorProperty, sensorValue, valRules);
-                                    if(!res.isValid()) System.out.println(res);
-                                }*/
 
                                 if(res.isValid()) props.append("<div>[" + StringEscapeUtils.escapeHtml(pair.getKey().toString()) + " : " + StringEscapeUtils.escapeHtml(pair.getValue().toString()) + "] </div>");
 
@@ -265,18 +281,31 @@ public class HtmlProfileReport {
         return generateMeasureTable(splitMeasures, "Application Split Measures");
     }
 
-    private String generateApplicationTable()
+    private String generateApplicationTable(String title)
     {
         StringBuilder builder = new StringBuilder();
-        String headers[] = {"Application"};
-        builder.append(htmlHelper.generateTableHeader(("Applications"), headers));
+        String headers[] = {"Application", "Pattern"};
+        builder.append(htmlHelper.generateSectionHeader(title));
+        builder.append(htmlHelper.generateTableHeader("", headers));
         ArrayList<Application> applications = uemConfigurationController.getApplications();
         int i = 1;
 
         for (Iterator<Application> applicationIterator = applications.iterator(); applicationIterator.hasNext(); ) {
             Application application = applicationIterator.next();
-            builder.append("<tr style=\"border:1px solid black\">\n<td style=\"border:1px solid black\">" + i + " : " + application.getName() + "</td></tr>");
+            StringBuilder patternBuilder = new StringBuilder();
+            //builder.append("<tr style=\"border:1px solid black\">\n<td style=\"border:1px solid black\">" + i + " : " + application.getName() + "</td></tr>");
             i++;
+            ArrayList<UriPattern> patterns = application.getUriPatterns();
+            if(patterns!=null)
+            {
+                for (Iterator<UriPattern> uriPatternIterator = patterns.iterator(); uriPatternIterator.hasNext(); ) {
+                    UriPattern next = uriPatternIterator.next();
+                    String sPattern = "<div>[" + next.getMatch() + "] " + next.getPattern() + "</div>";
+                    patternBuilder.append(sPattern);
+                }
+            }
+            String[] rowVars = {application.getName(), patternBuilder.toString()};
+            builder.append(generateTableRowAlreadyEscapedData(rowVars));
         }
         builder.append(generateTableFooter());
         return builder.toString();

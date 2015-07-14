@@ -124,12 +124,12 @@ public class ValidationHelper {
 
     public String translateOperator(String operator)
     {
-        if(operator.equals(EQUALS)) return " = ";
-        if(operator.equals(NOTEQUALS)) return " != ";
-        if(operator.equals(GREATER)) return " > ";
-        if(operator.equals(GREATEROREQUAL)) return " >= ";
-        if(operator.equals(LESSER)) return " < ";
-        if(operator.equals(LESSEROREQUAL)) return " <= ";
+        if(operator.equals(EQUALS)) return "=";
+        if(operator.equals(NOTEQUALS)) return "!=";
+        if(operator.equals(GREATER)) return ">";
+        if(operator.equals(GREATEROREQUAL)) return ">=";
+        if(operator.equals(LESSER)) return "<";
+        if(operator.equals(LESSEROREQUAL)) return "<=";
         return "NAN";
     }
 }

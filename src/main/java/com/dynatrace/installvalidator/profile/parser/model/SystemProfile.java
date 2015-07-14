@@ -14,13 +14,14 @@ public class SystemProfile {
 	private ArrayList<Measure> measures;
 	private UemConfiguration uemConfiguration;
 	private ArrayList<Technology> technologiesUsed;
+	private ArrayList<BusinessTransaction> businessTransactions;
 
-	private Boolean isTechDotNetActivated = false;
-	private Boolean isTechPhpActivated = false;
-	private Boolean isTechJavaActivated = true;
-	private Boolean isTechBrowserActivated = false;
-	private Boolean isTechNativeActivated = false;
-	private Boolean isTechWebServerActivated = false;
+	private Boolean isTechDotNetActivated;
+	private Boolean isTechPhpActivated;
+	private Boolean isTechJavaActivated;
+	private Boolean isTechBrowserActivated;
+	private Boolean isTechNativeActivated;
+	private Boolean isTechWebServerActivated;
 
 
 	
@@ -91,6 +92,15 @@ public class SystemProfile {
 	@XmlElement(name = "technology")
 	public void setTechnologiesUsed(ArrayList<Technology> technologiesUsed) {
 		this.technologiesUsed = technologiesUsed;
+	}
+
+	public ArrayList<BusinessTransaction> getBusinessTransactions() {
+		return businessTransactions;
+	}
+	@XmlElementWrapper(name = "transactions")
+	@XmlElement(name = "transaction")
+	public void setBusinessTransactions(ArrayList<BusinessTransaction> businessTransactions) {
+		this.businessTransactions = businessTransactions;
 	}
 
 	public Boolean getIsTechDotNetActivated() {

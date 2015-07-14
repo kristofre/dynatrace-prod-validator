@@ -140,7 +140,7 @@ public class MeasureController {
         ArrayList<String> list = new ArrayList<String>();
         list.add("ApiMeasure");
         list.add("ErrorDetectionMeasure");
-        list.add("JmxMeasure");
+        //list.add("JmxMeasure");
         list.add("BrowserPerformanceNetworkMeasure");
         list.add("BrowserPerformanceJavaScriptMeasure");
         list.add("BrowserPerformanceServerMeasure");
