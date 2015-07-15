@@ -10,10 +10,12 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.*;
 
+import com.dynatrace.installvalidator.profile.reporting.model.CssClass;
 import com.dynatrace.installvalidator.profile.reporting.model.HtmlHelper;
+import com.dynatrace.installvalidator.profile.reporting.reader.HtmlCssFileReader;
+import com.dynatrace.installvalidator.profile.reporting.writer.HtmlReportWriter;
 import com.dynatrace.installvalidator.profile.validator.controller.SensorConfigValidator;
 import com.dynatrace.installvalidator.profile.validator.model.ValidationResult;
-import com.sun.xml.internal.ws.developer.MemberSubmissionAddressing;
 import org.apache.commons.lang.StringEscapeUtils;
 
 /**
@@ -26,59 +28,86 @@ public class HtmlProfileReport {
     private ProfileController profileController;
     private SensorConfigurationController sensorConfigurationController;
     private SensorLibraryController sensorLibraryController;
+    private BusinessTransactionController businessTransactionController;
+    private IncidentRuleController incidentRuleController;
+    private HtmlCssFileReader htmlCssFileReader;
     private HtmlHelper htmlHelper;
 
     private SensorConfigValidator sensorConfigValidator;
 
     private SystemProfile profile;
-    public HtmlProfileReport(SystemProfile profile) {
+    private String profileName;
+    private long modDate;
+    private String dTVersion;
+    public HtmlProfileReport(SystemProfile profile, String profileName, long modDate, String dTVersion) {
         this.measureController = new MeasureController(profile);
         this.uemConfigurationController = new UemConfigurationController(profile);
         this.sensorGroupController = new SensorGroupController(profile);
         this.profileController = new ProfileController(profile);
         this.sensorConfigurationController = new SensorConfigurationController(profile);
         this.profile = profile;
+        this.profileName = profileName;
+        this.modDate = modDate;
+        this.dTVersion = dTVersion;
         this.sensorConfigValidator = new SensorConfigValidator();
         this.sensorLibraryController = new SensorLibraryController(profile);
+        this.businessTransactionController = new BusinessTransactionController(profile);
+        this.incidentRuleController = new IncidentRuleController(profile);
         this.htmlHelper = new HtmlHelper();
+        this.htmlCssFileReader = new HtmlCssFileReader();
     }
 
-    public void createReport(SystemProfile profile, String profileName, String outputFile)
+    public void createReport(String outputFile)
     {
-        String fileLocation = outputFile;
         StringBuilder html = new StringBuilder();
-
-
-        html.append(htmlHelper.generateReportHeader(profileName, profile.getDescription()));
+        String css = "";
+        try {
+            css = htmlCssFileReader.getStylesheet();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        //SystemProfile profile = dynatrace.getSystemProfile();
+        html.append(htmlHelper.generateReportHeader(profileName, profile.getDescription(), css, dTVersion, modDate));
 
         ArrayList<String> sectionTitles = new ArrayList<String>();
         String sectionApplications = "Applications";
         String sectionAgentGroups = "Agent Groups";
+        String sectionBusinessTransactions = "User Defined Business Transactions";
+        String sectionMeasures = "User Defined Measures";
+        String sectionRegexMeasures = "User Defined Measures That Use Regular Expressions";
+        String sectionAgentSplitMeasures = "User Defined Measures That Split By Agent";
+        String sectionApplicationSplitMeasures = "User Defined Measures That Split By Application";
+        String sectionSensorGroups = "Sensor Groups";
+        String sectionIncidents = "Incidents";
         sectionTitles.add(sectionApplications);
         sectionTitles.add(sectionAgentGroups);
+        sectionTitles.add(sectionSensorGroups);
+        sectionTitles.add(sectionBusinessTransactions);
+        sectionTitles.add(sectionMeasures);
+        sectionTitles.add(sectionIncidents);
+        sectionTitles.add(sectionRegexMeasures);
+        sectionTitles.add(sectionAgentSplitMeasures);
+        sectionTitles.add(sectionApplicationSplitMeasures);
+
 
         html.append(generateSectionList(sectionTitles));
 
         html.append(generateApplicationTable(sectionApplications));
-
         html.append(generateAgentGroupLists(sectionAgentGroups));
-        html.append(generateCustomMeasuresList());
-        html.append(generateRegexMeasuresList());
-        html.append(generateAgentSplitMeasuresList());
-        html.append(generateAppSplitMeasuresList());
-
-        html.append(generateSensorGroupList());
+        html.append(generateSensorGroupList(sectionSensorGroups));
+        html.append(generateBusinessTransactionList(sectionBusinessTransactions));
+        html.append(generateCustomMeasuresList(sectionMeasures));
+        html.append(generateIncidentTable(sectionIncidents));
+        html.append(generateRegexMeasuresList(sectionRegexMeasures));
+        html.append(generateAgentSplitMeasuresList(sectionAgentSplitMeasures));
+        html.append(generateAppSplitMeasuresList(sectionApplicationSplitMeasures));
 
         html.append(generateMeasureListOfType("JdbcMeasure"));
 
-
+        HtmlReportWriter writer = new HtmlReportWriter();
+        writer.writeHtmlReportToFile(html, outputFile);
         html.append(htmlHelper.generateReportFooter());
-        try {
-            FileOutputStream out = new FileOutputStream(fileLocation);
-            out.write(html.toString().getBytes());
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+
     }
 
     private String generateSectionList(ArrayList<String> sectionTitles)
@@ -92,10 +121,11 @@ public class HtmlProfileReport {
         return builder.toString();
     }
 
-    private String generateSensorGroupList()
+    private String generateSensorGroupList(String sectionTitle)
     {
         StringBuilder builder = new StringBuilder();
         ArrayList<SensorGroup> sensorGroups = sensorGroupController.getSensorGroups();
+        builder.append(htmlHelper.generateSectionHeader(sectionTitle));
 
         for (Iterator<SensorGroup> iterator = sensorGroups.iterator(); iterator.hasNext(); ) {
             SensorGroup next = iterator.next();
@@ -104,7 +134,7 @@ public class HtmlProfileReport {
             if(sensor!=null)
             {
                 String headers[] = {"Class", "Methods"};
-                builder.append(htmlHelper.generateTableHeader(("Sensor Group : " + sensor.getDescription()), headers));
+                builder.append(htmlHelper.generateTableHeader(("Sensor Group : " + sensor.getDescription() + " (" + sensor.getType() + " / " + sensor.getGroup() + ")"), headers));
                 ArrayList<Class> classes = sensor.getClasses();
                 if(classes != null && classes.size()>0) {
                     for (Iterator<Class> classIterator = classes.iterator(); classIterator.hasNext(); ) {
@@ -115,17 +145,20 @@ public class HtmlProfileReport {
                             if (methods != null && methods.size() > 0) {
                                 for (Iterator<Method> methodIterator = methods.iterator(); methodIterator.hasNext(); ) {
                                     Method method = methodIterator.next();
-                                    if(method.getCapture().startsWith("active")) methodBuilder.append(generateTextToDisplayOnEmptyMethodRule(method.getPattern()) + " (" + method.getMatch() + ")\n");
+                                    if(method.getCapture().toLowerCase().equals("active"))
+                                        methodBuilder.append(htmlHelper.generateDiv("[" + method.getMatch() + "] " + generateTextToDisplayOnEmptyMethodRule(method.getPattern())));
+                                    if(method.getCapture().toLowerCase().equals("startpp"))
+                                        methodBuilder.append(htmlHelper.generateDiv("[" + method.getMatch() + "] " + generateTextToDisplayOnEmptyMethodRule(method.getPattern()) + "[Entry Point]"));
                                 }
                             }
                             StringBuilder rowBuilder = new StringBuilder();
-                            rowBuilder.append(aClass.getPattern() + " (" + aClass.getMatch() + ")");
+                            rowBuilder.append(htmlHelper.generateDiv("[" + aClass.getMatch() + "] " + generateTextToDisplayOnEmptyMethodRule(aClass.getPattern()) + ""));
                             String rowArgs[] = {rowBuilder.toString(), methodBuilder.toString()};
-                            builder.append(generateTableRow(rowArgs));
+                            builder.append(htmlHelper.generateTableRowAlreadyEscapedData(rowArgs));
                         }
                     }
                 }
-                builder.append(generateTableFooter());
+                builder.append(htmlHelper.generateTableFooter());
             }
 
         }
@@ -141,7 +174,57 @@ public class HtmlProfileReport {
 
     private String generateBusinessTransactionList(String sectionTitle)
     {
-        return "";
+        ArrayList<BusinessTransaction> customBusinessTransactions = businessTransactionController.getUserDefinedBusinessTransactions();
+        StringBuilder builder = new StringBuilder();
+        builder.append(htmlHelper.generateSectionHeader(sectionTitle));
+        String headers[] = {"Act.", "Business Transaction", "PW", "Exp.", "Baseline", "Scope", "Filters", "Results", "Splittings"};
+        builder.append(htmlHelper.generateTableHeader("", headers));
+        for (Iterator<BusinessTransaction> businessTransactionIterator = customBusinessTransactions.iterator(); businessTransactionIterator.hasNext(); ) {
+            BusinessTransaction transaction = businessTransactionIterator.next();
+            String filters = "<ul>";
+            String results = "<ul>";
+            String splits = "<ul>";
+            ArrayList<MeasureReference> filterArrayList = transaction.getFilters();
+            ArrayList<MeasureReference> resultArrayList = transaction.getResults();
+            ArrayList<MeasureReference> splitArrayList = transaction.getSplittings();
+            for (Iterator<MeasureReference> referenceIterator = filterArrayList.iterator(); referenceIterator.hasNext(); ) {
+                MeasureReference filterRef = referenceIterator.next();
+                filters += htmlHelper.generateListItem(filterRef.getRefMeasure() + (referenceIterator.hasNext()?" [" + filterRef.getLogicalOperator()+"]":""));
+
+            }
+            if(transaction.isErrorDetectionSupport()) results += htmlHelper.generateListItem("Failure Rates");
+            for (Iterator<MeasureReference> iterator = resultArrayList.iterator(); iterator.hasNext(); ) {
+                MeasureReference resultRef = iterator.next();
+                results += htmlHelper.generateListItem(resultRef.getRefMeasure());
+            }
+            ArrayList<Measure> values = transaction.getValues();
+            boolean isApplicationAggregated = false;
+            boolean isAgentAggregated = false;
+            boolean isBaselined = false;
+            for (Iterator<Measure> iterator = values.iterator(); iterator.hasNext(); ) {
+                Measure next = iterator.next();
+                if(!next.getIsApplicationAggregated()) isApplicationAggregated = true;
+                if(!next.getIsAggregated()) isAgentAggregated = true;
+                if(next.getCalculateBaseline()) isBaselined = true;
+            }
+            if(isApplicationAggregated) splits += htmlHelper.generateListItem("Application");
+            if(isAgentAggregated) splits += htmlHelper.generateListItem("Agent");
+            for (Iterator<MeasureReference> iterator = splitArrayList.iterator(); iterator.hasNext(); ) {
+                MeasureReference splitRef = iterator.next();
+                splits += htmlHelper.generateListItem(splitRef.getRefMeasure());
+            }
+            filters += "</ul>";
+            results += "</ul>";
+            splits += "</ul>";
+            String pw = transaction.isAggregateGroups()?"Yes":"No";
+            String enabled = transaction.isEnabled()?"Yes":"No";
+            String export = transaction.isExport()?"Yes":"No";
+            String baseline = isBaselined?"Yes":"No";
+            String[] rowVars = {enabled, transaction.getId(), pw, export, baseline, businessTransactionController.translateServiceContext(transaction.getServicecontext()), filters, results, splits};
+            builder.append(htmlHelper.generateTableRowAlreadyEscapedData(rowVars));
+        }
+        builder.append(htmlHelper.generateTableFooter());
+        return builder.toString();
     }
 
     private String generateAgentGroupLists(String sectionTitle)
@@ -169,13 +252,11 @@ public class HtmlProfileReport {
                         StringBuilder props = new StringBuilder();
 
                         ValidationResult result = sensorConfigValidator.validateSensorConfig(properties, validationRules);
-                        if(!result.isValid()){
-                            String test;
-                        }
+
                         for (Iterator<HashMap<String, String>> iterator = properties.iterator(); iterator.hasNext(); ) {
                             HashMap<String, String> next = iterator.next();
                             Iterator it = next.entrySet().iterator();
-
+                            StringBuilder propBuilder = new StringBuilder();
                             while (it.hasNext())
                             {
                                 Map.Entry pair = (Map.Entry)it.next();
@@ -184,39 +265,22 @@ public class HtmlProfileReport {
 
                                 //ValidationResult res = sensorConfigValidator.validateSensorConfigProperty(next, validationRules);
                                 ValidationResult res = sensorConfigValidator.validateSensorConfigForParticularProperty(next, validationRules, sensorProperty);
-                                if(!res.isValid()) System.out.println(res);
+                                //if(!res.isValid()) System.out.println(res);
 
-                                if(res.isValid()) props.append("<div>[" + StringEscapeUtils.escapeHtml(pair.getKey().toString()) + " : " + StringEscapeUtils.escapeHtml(pair.getValue().toString()) + "] </div>");
+                                if(res.isValid()) propBuilder.append(htmlHelper.generateDiv("[" + StringEscapeUtils.escapeHtml(pair.getKey().toString()) + " : " + StringEscapeUtils.escapeHtml(pair.getValue().toString()) + "]"));
 
-                                else props.append("<div style=\"color:red;\">[" + StringEscapeUtils.escapeHtml(pair.getKey().toString()) + " : " + StringEscapeUtils.escapeHtml(pair.getValue().toString()) + "] -- REASON: [" + res.toString() +"]</div>");
+                                else propBuilder.append(htmlHelper.generateDivWithClass("[" + StringEscapeUtils.escapeHtml(pair.getKey().toString()) + " : " + StringEscapeUtils.escapeHtml(pair.getValue().toString()) + "] -- REASON: [" + res.toString() +"]", CssClass.ERROR));
 
                             }
-                            props.append("<br>");
+                            props.append(htmlHelper.generateDivWithClass(propBuilder.toString(), CssClass.PROPERTYBLOCK));
                         }
                         String[] rowVars = {translatePackageToSensorName(sensor.getId()), props.toString()};
-                        builder.append(generateTableRowAlreadyEscapedData(rowVars));
+                        builder.append(htmlHelper.generateTableRowAlreadyEscapedData(rowVars));
                     }
-
-                    /*if(profileController)
-                    if(!isDotNetActivated
-                            && (sensor.getId().startsWith("com.dynatrace.diagnostics.knowledgesensor.dotnet")
-                                ||sensor.getId().startsWith("com.dynatrace.diagnostics.sensorgroup.memory..NET.")
-                                ||sensor.getId().startsWith("com.dynatrace.diagnostics.sensorgroup.method..NET."))) {}
-                    else if(!isPhpActivated && sensor.getId().startsWith("com.dynatrace.diagnostics.knowledgesensor.php")) {}*/
-                    /*if(isDotNetActivated && sensorGroupController.getSensorTech(sensorId).equals(sensorGroupController.getSensorLibrary().NETTECH))
-                        generateTableRow(rowVars);
-                    else if(isPhpActivated && sensorGroupController.getSensorTech(sensorId).equals(sensorGroupController.getSensorLibrary().PHPTECH))
-                        generateTableRow(rowVars);
-                    if( && sensorGroupController.getSensorTech(sensorId).equals(sensorGroupController.getSensorLibrary().NETTECH))
-                        generateTableRow(rowVars);
-                    else
-                    {
-                        generateTableRow(rowVars);
-                    }*/
                 }
             }
             i++;
-            builder.append(generateTableFooter());
+            builder.append(htmlHelper.generateTableFooter());
         }
 
         return builder.toString();
@@ -227,67 +291,44 @@ public class HtmlProfileReport {
         return sensorGroupController.translateSensor(packageName);
     }
 
-    private String generateCustomMeasuresList()
+    private String generateCustomMeasuresList(String sectionTitle)
     {
-        StringBuilder builder = new StringBuilder();
         ArrayList<Measure> customMeasures = measureController.getCustomMeasures();
-        String headers[] = {"Measure", "Measure Type"};
-        builder.append(htmlHelper.generateTableHeader(("Custom Measures (total = " + customMeasures.size() + ")"), headers));
-
-        for (Iterator<Measure> measureIterator = customMeasures.iterator(); measureIterator.hasNext(); ) {
-            Measure measure = measureIterator.next();
-            String[] fields = {measure.getId(), measure.getMeasureType()};
-            builder.append(generateTableRow(fields));
-        }
-
-        builder.append(generateTableFooter());
-
-        return builder.toString();
+        return generateMeasureTable(customMeasures, sectionTitle);
     }
 
     private String generateMeasureListOfType(String type)
     {
-        StringBuilder builder = new StringBuilder();
         ArrayList<Measure> customMeasures = measureController.getMeasuresOfType(true, type);
-        String headers[] = {"Measure", "Measure Type"};
-        builder.append(htmlHelper.generateTableHeader((type + "Custom Measures (total = " + customMeasures.size() + ")"), headers));
-
-        for (Iterator<Measure> measureIterator = customMeasures.iterator(); measureIterator.hasNext(); ) {
-            Measure measure = measureIterator.next();
-            String[] fields = {measure.getId(), measure.getMeasureType()};
-            builder.append(generateTableRow(fields));
-        }
-
-        builder.append(generateTableFooter());
-
-        return builder.toString();
+        return generateMeasureTable(customMeasures, type + " Measures");
     }
 
-    private String generateRegexMeasuresList()
+    private String generateRegexMeasuresList(String sectionTitle)
     {
         ArrayList<Measure> regexMeasures = measureController.getMeasuresThatUseRegexEval(true);
-        return generateMeasureTable(regexMeasures, "Regex Measures");
+        return generateMeasureTable(regexMeasures, sectionTitle);
     }
 
-    private String generateAgentSplitMeasuresList()
+    private String generateAgentSplitMeasuresList(String sectionTitle)
     {
         ArrayList<Measure> splitMeasures = measureController.getMeasuresThatSplitByAgent(true, true);
-        return generateMeasureTable(splitMeasures, "Agent Split Measures");
+        return generateMeasureTable(splitMeasures, sectionTitle);
     }
 
-    private String generateAppSplitMeasuresList()
+    private String generateAppSplitMeasuresList(String sectionTitle)
     {
         ArrayList<Measure> splitMeasures = measureController.getMeasuresThatSplitByApplication(true, true);
-        return generateMeasureTable(splitMeasures, "Application Split Measures");
+        return generateMeasureTable(splitMeasures, sectionTitle);
     }
 
     private String generateApplicationTable(String title)
     {
         StringBuilder builder = new StringBuilder();
-        String headers[] = {"Application", "Pattern"};
+        String headers[] = {"Application", "Pattern", "UEM", "UEM Options"};
         builder.append(htmlHelper.generateSectionHeader(title));
         builder.append(htmlHelper.generateTableHeader("", headers));
         ArrayList<Application> applications = uemConfigurationController.getApplications();
+        UemApplicationConfig defaultUemConfig = uemConfigurationController.getDefaultUemConfig();
         int i = 1;
 
         for (Iterator<Application> applicationIterator = applications.iterator(); applicationIterator.hasNext(); ) {
@@ -304,61 +345,136 @@ public class HtmlProfileReport {
                     patternBuilder.append(sPattern);
                 }
             }
-            String[] rowVars = {application.getName(), patternBuilder.toString()};
-            builder.append(generateTableRowAlreadyEscapedData(rowVars));
+
+            boolean isUemEnabled = uemConfigurationController.isUemEnabledForApplication(application);
+
+            StringBuilder uemOptions = new StringBuilder();
+            if(isUemEnabled) {
+                try {
+                    UemJsAgentOption option =  application.getUemApplicationConfig().getUemSensorConfig().getUemJsAgentOption();
+                    uemOptions.append(generateUemOptionList(option));
+
+                } catch (NullPointerException e) {
+                    UemJsAgentOption option = defaultUemConfig.getUemSensorConfig().getUemJsAgentOption();
+                    uemOptions.append(generateUemOptionList(option));
+                }
+            }
+            String uem = uemConfigurationController.getUemModeForApplication(application);
+            String[] rowVars = {application.getName(), patternBuilder.toString(), uem, uemOptions.toString()};
+            builder.append(htmlHelper.generateTableRowAlreadyEscapedData(rowVars));
         }
-        builder.append(generateTableFooter());
+        builder.append(htmlHelper.generateTableFooter());
         return builder.toString();
     }
 
+    private String generateUemOptionList(UemJsAgentOption uemJsAgentOption)
+    {
+        ArrayList<UemModule> modules = uemJsAgentOption.getModules();
+        StringBuilder uemOptions = new StringBuilder();
+        uemOptions.append(htmlHelper.generateDivWithClass("UEM Sensors", CssClass.LISTHEADER));
+        if(modules!=null)
+        {
+            for (Iterator<UemModule> uemModuleIterator = modules.iterator(); uemModuleIterator.hasNext(); ) {
+                UemModule uemModule = uemModuleIterator.next();
+                uemOptions.append(htmlHelper.generateDivWithClass(translatePackageToSensorName(uemModule.getKey()), CssClass.LISTITEM));
+            }
+        }
 
 
+        String agentOption = uemJsAgentOption.getAgentOption();
+        if(agentOption.contains("bandwidth")){
+            //String bw = agentOption.substring(agentOption.indexOf("bandwidth="), agentOption.contains("_m")?agentOption.indexOf("_m"):agentOption.length()-1);
+            uemOptions.append(htmlHelper.generateDivWithClass("Bandwidth Calculation", CssClass.LISTHEADER));
+
+            if(!agentOption.contains("_m")) {
+                String bw = agentOption.substring(agentOption.indexOf("bandwidth=")+10);
+                uemOptions.append(htmlHelper.generateDiv("Timeout: " + bw));
+
+            }
+            else {
+                String bw = agentOption.substring(agentOption.indexOf("bandwidth=")+10, agentOption.indexOf("_m"));
+                uemOptions.append(htmlHelper.generateDivWithClass("Timeout: " + bw, CssClass.LISTITEM));
+                uemOptions.append(htmlHelper.generateDivWithClass("Mobile: True", CssClass.LISTITEM));
+            }
+        }
+
+        return uemOptions.toString();
+    }
+
+    private String generateIncidentTable(String sectionTitle)
+    {
+        StringBuilder builder = new StringBuilder();
+        String headers[] = {"Incident", "Conditions", "Actions"};
+        ArrayList<IncidentRule> incidentRules = incidentRuleController.getActiveIncidentRules();
+        builder.append(htmlHelper.generateSectionHeader(sectionTitle));
+        builder.append(htmlHelper.generateTableHeader("", headers));
+
+        for (Iterator<IncidentRule> incidentRuleIterator = incidentRules.iterator(); incidentRuleIterator.hasNext(); ) {
+            IncidentRule incidentRule = incidentRuleIterator.next();
+            String conditionList = "<ul>";
+            String actionList = "<ul>";
+            ArrayList<IncidentCondition> conditions = incidentRule.getConditions();
+            ArrayList<IncidentActionRef> actions = incidentRule.getActions();
+            if(conditions!= null)
+            {
+                for (Iterator<IncidentCondition> incidentConditionIterator = conditions.iterator(); incidentConditionIterator.hasNext(); ) {
+                    IncidentCondition condition = incidentConditionIterator.next();
+                    conditionList += htmlHelper.generateListItem(condition.getRefMeasure() + " [" + condition.getAggregate() + "] [" + condition.getThresholdSeverity() + "]" + (incidentConditionIterator.hasNext()?" [" + condition.getLogicalOperator() + "]":""));
+                }
+            }
+            if(actions!= null)
+            {
+                for (Iterator<IncidentActionRef> incidentActionRefIterator = actions.iterator(); incidentActionRefIterator.hasNext(); ) {
+                    IncidentActionRef actionRef = incidentActionRefIterator.next();
+                    actionList += htmlHelper.generateListItem(incidentRuleController.translatePlugin(actionRef.getType()));
+                }
+            }
+            conditionList += "</ul>";
+            actionList += "</ul>";
+
+            String[] rowVars = {incidentRule.getId(), conditionList, actionList};
+            builder.append(htmlHelper.generateTableRowAlreadyEscapedData(rowVars));
+        }
+
+        builder.append(htmlHelper.generateTableFooter());
+
+        return builder.toString();
+    }
 
     private String generateMeasureTable(ArrayList<Measure> measuresToList, String title)
     {
         StringBuilder builder = new StringBuilder();
         int i = 1;
-        String headers[] = {"Measure", "Measure Type"};
+        String headers[] = {"Measure", "Thresholds", "Measure Type"};
+        builder.append(htmlHelper.generateSectionHeader(title));
         builder.append(htmlHelper.generateTableHeader((title + " (total = " + measuresToList.size() + ")"), headers));
 
         for (Iterator<Measure> measureIterator = measuresToList.iterator(); measureIterator.hasNext(); ) {
             Measure measure = measureIterator.next();
-            String[] fields = {measure.getId(), measure.getMeasureType()};
-            builder.append(generateTableRow(fields));
+            String thresholds = "";
+            MeasureThreshold measureThreshold = measure.getMeasureThreshold();
+            if(measureThreshold != null)
+            {
+                if(measureThreshold.getUpperSevere() != null) thresholds += "<div>Upper Severe: " + measureThreshold.getUpperSevere() + "</div>";
+                if(measureThreshold.getUpperWarning() != null) thresholds += "<div>Upper Warning: " + measureThreshold.getUpperWarning() + "</div>";
+                if(measureThreshold.getLowerWarning() != null) thresholds += "<div>Lower Warning: " + measureThreshold.getLowerWarning() + "</div>";
+                if(measureThreshold.getLowerSevere() != null) thresholds += "<div>Lowe Severe: " + measureThreshold.getLowerSevere() + "</div>";
+            }
+            String[] fields = {measure.getId(), thresholds, measure.getMeasureType()};
+            builder.append(htmlHelper.generateTableRowAlreadyEscapedData(fields));
             i++;
         }
 
-        builder.append(generateTableFooter());
+        builder.append(htmlHelper.generateTableFooter());
 
         return builder.toString();
     }
 
-    private String generateTableFooter()
-    {
-        return ("</table>");
-    }
 
-    private String generateTableRow(String[] values)
-    {
-        StringBuilder builder = new StringBuilder();
-        builder.append("<tr style=\"border:1px solid black\">");
-        for (int i = 0; i < values.length; i++) {
-            builder.append("<td style=\"border:1px solid black\">"+StringEscapeUtils.escapeHtml(values[i])+"</td>");
-        }
-        builder.append("</tr>\n");
-        return builder.toString();
-    }
 
-    private String generateTableRowAlreadyEscapedData(String[] values)
-    {
-        StringBuilder builder = new StringBuilder();
-        builder.append("<tr style=\"border:1px solid black\">");
-        for (int i = 0; i < values.length; i++) {
-            builder.append("<td style=\"border:1px solid black\">"+(values[i])+"</td>");
-        }
-        builder.append("</tr>\n");
-        return builder.toString();
-    }
+
+
+
 
 
 }

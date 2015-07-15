@@ -14,15 +14,24 @@ public class SensorDynatrace {
     }
 
     private ArrayList<SensorDetail> sensorDetails;
+    private ArrayList<Plugin> plugins;
 
     public ArrayList<SensorDetail> getSensorDetails() {
         return sensorDetails;
     }
-    // XmLElementWrapper generates a wrapper element around XML representation
+
     @XmlElementWrapper(name = "sensors")
-    // XmlElement sets the name of the entities in collection
     @XmlElement(name = "sensor")
     public void setSensorDetails(ArrayList<SensorDetail> sensorDetails) {
         this.sensorDetails = sensorDetails;
+    }
+
+    public ArrayList<Plugin> getPlugins() {
+        return plugins;
+    }
+    @XmlElementWrapper(name = "plugins")
+    @XmlElement(name = "plugin")
+    public void setPlugins(ArrayList<Plugin> plugins) {
+        this.plugins = plugins;
     }
 }

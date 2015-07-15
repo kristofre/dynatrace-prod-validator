@@ -1,0 +1,45 @@
+th {
+    background-color: #0066CC;
+    color: white;
+    border:1px solid black;
+}
+
+table {
+    border-spacing: 0;
+    border-collapse: collapse;
+    width: 100%;
+    border:1px solid black;
+}
+
+td {
+    word-wrap: break-word;
+    max-width: 350px;
+    border:1px solid black;
+}
+
+ul, li {
+    padding-left: 20px;
+    margin: 0px;
+}
+
+div.litem {
+    padding-left: 20px;
+}
+
+div.lheader {
+    font-weight: bold;
+}
+
+div.error {
+    color: red;
+}
+
+div.propertyBlock{
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+
+.subtitle{
+    font-style: italic;
+    padding-bottom:30px;
+}

@@ -13,6 +13,7 @@ public class Application {
     private String name;
     private String autoDetectType;
     private ArrayList<UriPattern> uriPatterns;
+    private UemApplicationConfig uemApplicationConfig;
 
     public Boolean getIsDefault() {
         return isDefault;
@@ -45,5 +46,14 @@ public class Application {
     @XmlElement(name = "uripattern")
     public void setUriPatterns(ArrayList<UriPattern> uriPatterns) {
         this.uriPatterns = uriPatterns;
+    }
+
+    public UemApplicationConfig getUemApplicationConfig() {
+        return uemApplicationConfig;
+    }
+
+    @XmlElement(name = "uemappconfig")
+    public void setUemApplicationConfig(UemApplicationConfig uemApplicationConfig) {
+        this.uemApplicationConfig = uemApplicationConfig;
     }
 }

@@ -20,6 +20,7 @@ public class BusinessTransaction {
     private ArrayList<MeasureReference> filters;
     private ArrayList<MeasureReference> splittings;
     private ArrayList<MeasureReference> results;
+    private ArrayList<Measure> values;
 
     public boolean isAggregateGroups() {
         return aggregateGroups;
@@ -166,5 +167,14 @@ public class BusinessTransaction {
     @XmlAttribute(name = "transactiontype")
     public void setTransactiontype(String transactiontype) {
         this.transactiontype = transactiontype;
+    }
+
+    public ArrayList<Measure> getValues() {
+        return values;
+    }
+    @XmlElementWrapper(name = "value")
+    @XmlElement(name = "measure")
+    public void setValues(ArrayList<Measure> values) {
+        this.values = values;
     }
 }

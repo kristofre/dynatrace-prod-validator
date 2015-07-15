@@ -15,6 +15,7 @@ public class SystemProfile {
 	private UemConfiguration uemConfiguration;
 	private ArrayList<Technology> technologiesUsed;
 	private ArrayList<BusinessTransaction> businessTransactions;
+	private ArrayList<IncidentRule> incidentRules;
 
 	private Boolean isTechDotNetActivated;
 	private Boolean isTechPhpActivated;
@@ -103,7 +104,16 @@ public class SystemProfile {
 		this.businessTransactions = businessTransactions;
 	}
 
-	public Boolean getIsTechDotNetActivated() {
+	public ArrayList<IncidentRule> getIncidentRules() {
+		return incidentRules;
+	}
+	@XmlElementWrapper(name = "incidentrules")
+	@XmlElement(name = "incidentrule")
+	public void setIncidentRules(ArrayList<IncidentRule> incidentRules) {
+		this.incidentRules = incidentRules;
+	}
+
+	/*public Boolean getIsTechDotNetActivated() {
 		return isTechDotNetActivated;
 	}
 
@@ -149,7 +159,7 @@ public class SystemProfile {
 
 	public void setIsTechWebServerActivated(Boolean isTechWebServerActivated) {
 		this.isTechWebServerActivated = isTechWebServerActivated;
-	}
+	}*/
 
 
 

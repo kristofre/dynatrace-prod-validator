@@ -9,6 +9,7 @@ import java.util.ArrayList;
  */
 public class UemConfiguration {
     private ArrayList<Application> applications;
+    private UemApplicationConfig defaultUemAppConfig;
 
     public ArrayList<Application> getApplications() {
         return applications;
@@ -17,5 +18,13 @@ public class UemConfiguration {
     @XmlElement(name = "application")
     public void setApplications(ArrayList<Application> applications) {
         this.applications = applications;
+    }
+
+    public UemApplicationConfig getDefaultUemAppConfig() {
+        return defaultUemAppConfig;
+    }
+    @XmlElement(name = "uemappconfig")
+    public void setDefaultUemAppConfig(UemApplicationConfig defaultUemAppConfig) {
+        this.defaultUemAppConfig = defaultUemAppConfig;
     }
 }

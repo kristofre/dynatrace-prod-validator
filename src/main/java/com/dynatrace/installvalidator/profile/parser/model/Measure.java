@@ -1,6 +1,7 @@
 package com.dynatrace.installvalidator.profile.parser.model;
 
 import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlElement;
 import java.util.Comparator;
 import java.util.Date;
 
@@ -37,6 +38,7 @@ public class Measure implements Comparable<Measure> {
     private String methodNameMatch;
     private String endPointMatch;
     private String operationNameMatch;
+    private MeasureThreshold measureThreshold;
 
     public Boolean getIsApplicationAggregated() {
         return isApplicationAggregated;
@@ -268,6 +270,14 @@ public class Measure implements Comparable<Measure> {
     @XmlAttribute(name = "operationnamematch")
     public void setOperationNameMatch(String operationNameMatch) {
         this.operationNameMatch = operationNameMatch;
+    }
+
+    public MeasureThreshold getMeasureThreshold() {
+        return measureThreshold;
+    }
+    @XmlElement(name = "thresholds")
+    public void setMeasureThreshold(MeasureThreshold measureThreshold) {
+        this.measureThreshold = measureThreshold;
     }
 
     public int compareTo(Measure measure) {

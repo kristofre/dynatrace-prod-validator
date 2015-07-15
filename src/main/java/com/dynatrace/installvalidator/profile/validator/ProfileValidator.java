@@ -5,6 +5,7 @@ import java.io.IOException;
 
 import javax.xml.bind.JAXBException;
 
+import com.dynatrace.installvalidator.profile.parser.model.Dynatrace;
 import com.dynatrace.installvalidator.profile.parser.model.SystemProfile;
 import com.dynatrace.installvalidator.profile.parser.repository.ProfileRepository;
 import com.dynatrace.installvalidator.profile.reporting.generator.HtmlProfileReport;
@@ -51,16 +52,17 @@ public class ProfileValidator
 		try {
 			ProfileRepository profileRepository = new ProfileRepository();
 			File XMLfile = new File(inputFile);
-			SystemProfile profile = profileRepository.getSystemProfile(XMLfile);
+			Dynatrace dynatrace = profileRepository.getDynatrace(XMLfile);
+			SystemProfile profile = dynatrace.getSystemProfile();
 			String profileName = XMLfile.getName().substring(0, XMLfile.getName().indexOf(".profile.xml"));
 
-			HtmlProfileReport report = new HtmlProfileReport(profile);
+			HtmlProfileReport report = new HtmlProfileReport(profile, profileName, XMLfile.lastModified(), dynatrace.getVersion());
 			if(outputFile.isEmpty())
 			{
 				File f = new File(".");
 				outputFile = f.getCanonicalPath() + "/" + profileName + "_validated.html";
 			}
-			report.createReport(profile, profileName, outputFile);
+			report.createReport(outputFile);
 
 		}  catch (IOException e) {
 			e.printStackTrace();

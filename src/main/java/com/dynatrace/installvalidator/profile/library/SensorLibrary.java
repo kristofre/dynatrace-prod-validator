@@ -1,5 +1,6 @@
 package com.dynatrace.installvalidator.profile.library;
 
+import com.dynatrace.installvalidator.profile.library.model.Plugin;
 import com.dynatrace.installvalidator.profile.library.model.SensorDynatrace;
 import com.dynatrace.installvalidator.profile.parser.model.Dynatrace;
 import com.dynatrace.installvalidator.profile.library.model.SensorDetail;
@@ -59,6 +60,14 @@ public class SensorLibrary {
     {
         if(sensorDynatrace != null)
             return sensorDynatrace.getSensorDetails();
+        else
+            return null;
+    }
+
+    public ArrayList<Plugin> getPlugins()
+    {
+        if(sensorDynatrace != null)
+            return sensorDynatrace.getPlugins();
         else
             return null;
     }

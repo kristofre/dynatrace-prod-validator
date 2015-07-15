@@ -15,7 +15,7 @@ public class ProfileRepository {
     public ProfileRepository() {
     }
 
-    public SystemProfile getSystemProfile(File file)
+    public Dynatrace getDynatrace(File file)
     {
         try {
             JAXBContext jaxbContext = JAXBContext.newInstance(Dynatrace.class);
@@ -26,7 +26,7 @@ public class ProfileRepository {
             SystemProfile profile = dtProfile.getSystemProfile();
             //System.out.println("Profile Description: " + profile.getDescription());
 
-            return profile;
+            return dtProfile;
 
             //ArrayList<AgentGroup> agentGroups = profile.getAgentGroups();
 
@@ -41,6 +41,6 @@ public class ProfileRepository {
             e.printStackTrace();
         }
 
-        return new SystemProfile();
+        return new Dynatrace();
     }
 }

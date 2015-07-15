@@ -140,4 +140,13 @@
         <sensor id="com.dynatrace.diagnostics.knowledgesensor.js.navtiming" name="JavaScript - Navigation Timings" tech="Javascript"/>
         <sensor id="com.dynatrace.diagnostics.knowledgesensor.sampling.java" name="Java Sampling" tech="Sampling"/>
     </sensors>
+    <plugins>
+        <plugin id="com.dynatrace.diagnostics.logging" name="Incident Creation" />
+        <plugin id="com.dynatrace.diagnostics.plugins.EmailNotification" name="Email" />
+        <plugin id="com.dynatrace.diagnostics.plugin.ThreadDumpAction" name="Thread Dump" />
+        <plugin id="com.dynatrace.diagnostics.plugin.SamplingAction" name="CPU Sampling" />
+        <plugin id="com.dynatrace.diagnostics.plugin.MemoryDumpAction" name="Memory Dump" />
+        <plugin id="com.dynatrace.diagnostics.plugin.StoreSessionAction" name="Store Session" />
+        <plugin id="com.dynatrace.diagnostics.plugin.ActivateConfigurationAction" name="Activate Configuration" />
+    </plugins>
 </dynatrace>
