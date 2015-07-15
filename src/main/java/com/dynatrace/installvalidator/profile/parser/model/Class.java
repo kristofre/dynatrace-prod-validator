@@ -52,6 +52,4 @@ public class Class {
 	public void setMethods(ArrayList<Method> methods) {
 		this.methods = methods;
 	}
-	
-	
 }

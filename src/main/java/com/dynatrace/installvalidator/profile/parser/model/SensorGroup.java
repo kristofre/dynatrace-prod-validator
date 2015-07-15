@@ -13,5 +13,4 @@ public class SensorGroup {
 	public void setSensor(Sensor sensor) {
 		this.sensor = sensor;
 	}
-	
 }

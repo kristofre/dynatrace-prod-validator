@@ -49,5 +49,4 @@ public class AgentGroup {
 	public void setSensorPlacement(SensorPlacement sensorPlacement) {
 		this.sensorPlacement = sensorPlacement;
 	}
-	
 }

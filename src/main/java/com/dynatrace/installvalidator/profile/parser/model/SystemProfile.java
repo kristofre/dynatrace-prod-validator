@@ -160,7 +160,4 @@ public class SystemProfile {
 	public void setIsTechWebServerActivated(Boolean isTechWebServerActivated) {
 		this.isTechWebServerActivated = isTechWebServerActivated;
 	}*/
-
-
-
 }

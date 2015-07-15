@@ -30,5 +30,4 @@ public class SensorPlacement  {
 	public void setSensors(ArrayList<Sensor> sensors) {
 		this.sensors = sensors;
 	}
-	
 }

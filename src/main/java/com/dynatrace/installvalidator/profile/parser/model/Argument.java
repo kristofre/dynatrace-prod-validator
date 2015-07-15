@@ -43,5 +43,4 @@ public class Argument {
 	public void setArgumentName(String argumentName) {
 		this.argumentName = argumentName;
 	}
-	
 }

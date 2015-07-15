@@ -26,7 +26,4 @@ public class Dynatrace {
 	public void setVersion(String version) {
 		this.version = version;
 	}
-	
-	
-	
 }

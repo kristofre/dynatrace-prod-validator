@@ -110,5 +110,4 @@ public class Method {
 	public void setArguments(ArrayList<Argument> arguments) {
 		this.arguments = arguments;
 	}
-	
 }

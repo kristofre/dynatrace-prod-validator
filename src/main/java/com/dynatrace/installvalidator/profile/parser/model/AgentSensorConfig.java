@@ -46,6 +46,4 @@ public class AgentSensorConfig {
 	public void setProperties(ArrayList<SensorProperty> properties) {
 		this.properties = properties;
 	}
-	
-	
 }

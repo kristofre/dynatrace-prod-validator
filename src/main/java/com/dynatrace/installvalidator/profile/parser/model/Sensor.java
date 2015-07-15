@@ -85,6 +85,4 @@ public class Sensor {
 	public void setClasses(ArrayList<Class> classes) {
 		this.classes = classes;
 	}
-	
-
 }

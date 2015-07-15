@@ -55,6 +55,4 @@ public class AgentMapping {
 	public void setNamePattern(String namePattern) {
 		this.namePattern = namePattern;
 	}
-	
-	
 }
