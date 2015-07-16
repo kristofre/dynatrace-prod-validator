@@ -12,7 +12,7 @@ public class BaseController {
 
     public BaseController(SystemProfile profile) {
         this.profile = profile;
-        sensorLibrary = getSensorLibrary();
+        this.sensorLibrary = getSensorLibrary();
     }
 
     public static SystemProfile getProfile() {
@@ -22,7 +22,7 @@ public class BaseController {
     public static void setProfile(SystemProfile profile) {
         BaseController.profile = profile;
     }
-
+    
     public SensorLibrary getSensorLibrary()
     {
         sensorLibrary = SensorLibrary.getInstance();

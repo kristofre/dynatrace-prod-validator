@@ -8,7 +8,10 @@ import com.dynatrace.installvalidator.profile.library.model.SensorDetail;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
+
+
 import java.io.File;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Iterator;
 
@@ -18,7 +21,8 @@ import java.util.Iterator;
 public class SensorLibrary {
     private static SensorLibrary instance = null;
 
-    private static final String SENSORLISTFILELOCATION = "target/classes/sensortranslations.xml";
+    private static final String CONFIGFILELOCATION = "/sensortranslations.xml";
+    //private static final String SENSORLISTFILELOCATION = "target/classes/sensortranslations.xml";
     private File sensorTranslation;
     private ArrayList<SensorDetail> sensorDetails;
     private SensorDynatrace sensorDynatrace;
@@ -40,8 +44,11 @@ public class SensorLibrary {
         try {
             jaxbContext = JAXBContext.newInstance(SensorDynatrace.class);
             Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
-            File XMLfile = new File(SENSORLISTFILELOCATION);
-            sensorDynatrace = (SensorDynatrace) jaxbUnmarshaller.unmarshal(XMLfile);
+            //File XMLfile = new File(SENSORLISTFILELOCATION);
+            //sensorDynatrace = (SensorDynatrace) jaxbUnmarshaller.unmarshal(XMLfile);
+            
+            InputStream stream = getClass().getResourceAsStream(CONFIGFILELOCATION);
+            sensorDynatrace = (SensorDynatrace) jaxbUnmarshaller.unmarshal(stream);
 
         } catch (JAXBException e) {
             e.printStackTrace();
@@ -55,6 +62,7 @@ public class SensorLibrary {
         }
         return instance;
     }
+ 
 
     public ArrayList<SensorDetail> getSensorDetails()
     {

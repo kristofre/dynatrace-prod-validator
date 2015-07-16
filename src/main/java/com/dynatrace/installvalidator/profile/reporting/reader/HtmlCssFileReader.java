@@ -8,10 +8,10 @@ import java.io.*;
  * Created by kristof on 14.07.15.
  */
 public class HtmlCssFileReader {
-    private static final String CSSFILELOCATION = "target/classes/stylesheet.css";
+    private static final String CSSFILELOCATION = "/stylesheet.css";
 
     public String getStylesheet() throws IOException {
-        FileInputStream inputStream = new FileInputStream(CSSFILELOCATION);
+        InputStream inputStream = getClass().getResourceAsStream(CSSFILELOCATION);
         try {
             String everything = IOUtils.toString(inputStream);
             return everything;

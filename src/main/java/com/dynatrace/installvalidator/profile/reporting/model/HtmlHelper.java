@@ -1,10 +1,10 @@
 package com.dynatrace.installvalidator.profile.reporting.model;
 
-import org.apache.commons.lang.StringEscapeUtils;
-
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+
+import org.apache.commons.lang3.StringEscapeUtils;
 
 /**
  * Created by kristof on 07.07.15.
@@ -57,7 +57,7 @@ public class HtmlHelper {
     {
         StringBuilder builder = new StringBuilder();
 
-        builder.append("<h2 id=" + StringEscapeUtils.escapeHtml(title).replace(" ", "_") + ">" +title + "</h2><br>");
+        builder.append("<h2 id=" + StringEscapeUtils.escapeHtml4(title).replace(" ", "_") + ">" +title + "</h2><br>");
         return builder.toString();
     }
 
@@ -82,7 +82,7 @@ public class HtmlHelper {
         StringBuilder builder = new StringBuilder();
         builder.append("<tr>");
         for (int i = 0; i < values.length; i++) {
-            builder.append("<td>"+StringEscapeUtils.escapeHtml(values[i])+"</td>");
+            builder.append("<td>"+StringEscapeUtils.escapeHtml4(values[i])+"</td>");
         }
         builder.append("</tr>\n");
         return builder.toString();

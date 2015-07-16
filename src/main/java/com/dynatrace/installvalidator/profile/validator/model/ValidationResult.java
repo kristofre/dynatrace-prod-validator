@@ -1,7 +1,5 @@
 package com.dynatrace.installvalidator.profile.validator.model;
 
-import com.sun.xml.internal.ws.developer.MemberSubmissionAddressing;
-
 import java.util.ArrayList;
 import java.util.Iterator;
 

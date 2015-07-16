@@ -3,8 +3,6 @@ package com.dynatrace.installvalidator.profile.validator.controller;
 import com.dynatrace.installvalidator.profile.library.model.SensorValidationProperty;
 import com.dynatrace.installvalidator.profile.validator.model.ValidationError;
 import com.dynatrace.installvalidator.profile.validator.model.ValidationResult;
-import com.sun.xml.internal.ws.developer.MemberSubmissionAddressing;
-
 import javax.xml.namespace.QName;
 import java.util.*;
 

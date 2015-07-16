@@ -1,22 +1,47 @@
 package com.dynatrace.installvalidator.profile.reporting.generator;
 
-import com.dynatrace.installvalidator.profile.library.model.*;
-import com.dynatrace.installvalidator.profile.parser.controller.*;
-import com.dynatrace.installvalidator.profile.library.controller.SensorLibraryController;
-import com.dynatrace.installvalidator.profile.parser.model.*;
-import com.dynatrace.installvalidator.profile.parser.model.Class;
-
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
 
+import org.apache.commons.lang3.StringEscapeUtils;
+
+import com.dynatrace.installvalidator.profile.library.SensorLibrary;
+import com.dynatrace.installvalidator.profile.library.controller.SensorLibraryController;
+import com.dynatrace.installvalidator.profile.library.model.SensorValidationProperty;
+import com.dynatrace.installvalidator.profile.parser.controller.BusinessTransactionController;
+import com.dynatrace.installvalidator.profile.parser.controller.IncidentRuleController;
+import com.dynatrace.installvalidator.profile.parser.controller.MeasureController;
+import com.dynatrace.installvalidator.profile.parser.controller.ProfileController;
+import com.dynatrace.installvalidator.profile.parser.controller.SensorConfigurationController;
+import com.dynatrace.installvalidator.profile.parser.controller.SensorGroupController;
+import com.dynatrace.installvalidator.profile.parser.controller.UemConfigurationController;
+import com.dynatrace.installvalidator.profile.parser.model.AgentGroup;
+import com.dynatrace.installvalidator.profile.parser.model.Application;
+import com.dynatrace.installvalidator.profile.parser.model.BusinessTransaction;
+import com.dynatrace.installvalidator.profile.parser.model.Class;
+import com.dynatrace.installvalidator.profile.parser.model.IncidentActionRef;
+import com.dynatrace.installvalidator.profile.parser.model.IncidentCondition;
+import com.dynatrace.installvalidator.profile.parser.model.IncidentRule;
+import com.dynatrace.installvalidator.profile.parser.model.Measure;
+import com.dynatrace.installvalidator.profile.parser.model.MeasureReference;
+import com.dynatrace.installvalidator.profile.parser.model.MeasureThreshold;
+import com.dynatrace.installvalidator.profile.parser.model.Method;
+import com.dynatrace.installvalidator.profile.parser.model.Sensor;
+import com.dynatrace.installvalidator.profile.parser.model.SensorGroup;
+import com.dynatrace.installvalidator.profile.parser.model.SystemProfile;
+import com.dynatrace.installvalidator.profile.parser.model.UemApplicationConfig;
+import com.dynatrace.installvalidator.profile.parser.model.UemJsAgentOption;
+import com.dynatrace.installvalidator.profile.parser.model.UemModule;
+import com.dynatrace.installvalidator.profile.parser.model.UriPattern;
 import com.dynatrace.installvalidator.profile.reporting.model.CssClass;
 import com.dynatrace.installvalidator.profile.reporting.model.HtmlHelper;
 import com.dynatrace.installvalidator.profile.reporting.reader.HtmlCssFileReader;
 import com.dynatrace.installvalidator.profile.reporting.writer.HtmlReportWriter;
 import com.dynatrace.installvalidator.profile.validator.controller.SensorConfigValidator;
 import com.dynatrace.installvalidator.profile.validator.model.ValidationResult;
-import org.apache.commons.lang.StringEscapeUtils;
 
 /**
  * Created by kristof on 30.04.15.
@@ -40,7 +65,8 @@ public class HtmlProfileReport {
     private long modDate;
     private String dTVersion;
     public HtmlProfileReport(SystemProfile profile, String profileName, long modDate, String dTVersion) {
-        this.measureController = new MeasureController(profile);
+    	this.sensorLibraryController = new SensorLibraryController(profile);
+    	this.measureController = new MeasureController(profile);
         this.uemConfigurationController = new UemConfigurationController(profile);
         this.sensorGroupController = new SensorGroupController(profile);
         this.profileController = new ProfileController(profile);
@@ -50,7 +76,6 @@ public class HtmlProfileReport {
         this.modDate = modDate;
         this.dTVersion = dTVersion;
         this.sensorConfigValidator = new SensorConfigValidator();
-        this.sensorLibraryController = new SensorLibraryController(profile);
         this.businessTransactionController = new BusinessTransactionController(profile);
         this.incidentRuleController = new IncidentRuleController(profile);
         this.htmlHelper = new HtmlHelper();
@@ -116,7 +141,7 @@ public class HtmlProfileReport {
 
         for (Iterator<String> iterator = sectionTitles.iterator(); iterator.hasNext(); ) {
             String next = iterator.next();
-            builder.append("<a href=#" + StringEscapeUtils.escapeHtml(next).replace(" ", "_") + ">" + next + "</a></br>");
+            builder.append("<a href=#" + StringEscapeUtils.escapeHtml4(next).replace(" ", "_") + ">" + next + "</a></br>");
         }
         return builder.toString();
     }
@@ -267,9 +292,9 @@ public class HtmlProfileReport {
                                 ValidationResult res = sensorConfigValidator.validateSensorConfigForParticularProperty(next, validationRules, sensorProperty);
                                 //if(!res.isValid()) System.out.println(res);
 
-                                if(res.isValid()) propBuilder.append(htmlHelper.generateDiv("[" + StringEscapeUtils.escapeHtml(pair.getKey().toString()) + " : " + StringEscapeUtils.escapeHtml(pair.getValue().toString()) + "]"));
+                                if(res.isValid()) propBuilder.append(htmlHelper.generateDiv("[" + StringEscapeUtils.escapeHtml4(pair.getKey().toString()) + " : " + StringEscapeUtils.escapeHtml4(pair.getValue().toString()) + "]"));
 
-                                else propBuilder.append(htmlHelper.generateDivWithClass("[" + StringEscapeUtils.escapeHtml(pair.getKey().toString()) + " : " + StringEscapeUtils.escapeHtml(pair.getValue().toString()) + "] -- REASON: [" + res.toString() +"]", CssClass.ERROR));
+                                else propBuilder.append(htmlHelper.generateDivWithClass("[" + StringEscapeUtils.escapeHtml4(pair.getKey().toString()) + " : " + StringEscapeUtils.escapeHtml4(pair.getValue().toString()) + "] -- REASON: [" + res.toString() +"]", CssClass.ERROR));
 
                             }
                             props.append(htmlHelper.generateDivWithClass(propBuilder.toString(), CssClass.PROPERTYBLOCK));
