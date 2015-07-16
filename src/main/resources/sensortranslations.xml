@@ -10,7 +10,7 @@
         <sensor id="com.dynatrace.diagnostics.knowledgesensor.java.default" name="Java Default" tech="java" defaulthide="true"/>
         <sensor id="com.dynatrace.diagnostics.knowledgesensor.java.ejb" name="EJB" tech="java"/>
         <sensor id="com.dynatrace.diagnostics.knowledgesensor.java.nosql.cassandra.tagging" name="Cassandra Tagging" tech="java"/>
-        <sensor id="com.dynatrace.diagnostics.knowledgesensor.java.jdbc" name="JDBC ttyu" tech="java">
+        <sensor id="com.dynatrace.diagnostics.knowledgesensor.java.jdbc" name="JDBC" tech="java">
             <property propertytype="aggregate" name="aggregate" datatype="boolean" operator="=" value="true" />
             <property propertytype="capturebindvalues" name="capturebindvalues" datatype="boolean" operator="=" value="false" />
             <property propertytype="maxsqlstringlength" name="maxsqlstringlength" datatype="integer" operator="lt" value="1024" />
