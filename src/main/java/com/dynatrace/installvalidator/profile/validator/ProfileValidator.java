@@ -60,6 +60,7 @@ public class ProfileValidator
 		String profileName = XMLfile.getName().substring(0, XMLfile.getName().indexOf(".profile.xml"));
 		if(outputFile.isEmpty())
 		{
+			String test;
 			File f = new File(".");
 			try {
 				outputFile = f.getCanonicalPath() + "/" + profileName + "_validated.html";
