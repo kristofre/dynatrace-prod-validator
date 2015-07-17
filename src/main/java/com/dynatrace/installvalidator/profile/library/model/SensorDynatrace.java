@@ -15,6 +15,7 @@ public class SensorDynatrace {
 
     private ArrayList<SensorDetail> sensorDetails;
     private ArrayList<Plugin> plugins;
+    private ArrayList<MeasureType> types;
 
     public ArrayList<SensorDetail> getSensorDetails() {
         return sensorDetails;
@@ -34,4 +35,15 @@ public class SensorDynatrace {
     public void setPlugins(ArrayList<Plugin> plugins) {
         this.plugins = plugins;
     }
+
+	public ArrayList<MeasureType> getTypes() {
+		return types;
+	}
+	@XmlElementWrapper(name = "measuretypes")
+    @XmlElement(name = "type")
+	public void setTypes(ArrayList<MeasureType> types) {
+		this.types = types;
+	}
+    
+    
 }

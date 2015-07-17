@@ -1,5 +1,6 @@
 package com.dynatrace.installvalidator.profile.library;
 
+import com.dynatrace.installvalidator.profile.library.model.MeasureType;
 import com.dynatrace.installvalidator.profile.library.model.Plugin;
 import com.dynatrace.installvalidator.profile.library.model.SensorDynatrace;
 import com.dynatrace.installvalidator.profile.parser.model.Dynatrace;
@@ -80,6 +81,13 @@ public class SensorLibrary {
             return null;
     }
 
+    public ArrayList<MeasureType> getMeasureTypes()
+    {
+        if(sensorDynatrace != null)
+            return sensorDynatrace.getTypes();
+        else
+            return null;
+    }
 
     public String getSensorTech(String sensorName)
     {

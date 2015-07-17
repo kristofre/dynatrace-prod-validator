@@ -149,4 +149,15 @@
         <plugin id="com.dynatrace.diagnostics.plugin.StoreSessionAction" name="Store Session" />
         <plugin id="com.dynatrace.diagnostics.plugin.ActivateConfigurationAction" name="Activate Configuration" />
     </plugins>
+    <measuretypes>
+    	<type id="JdbcMeasure" hide="false" name="Database"/>
+    	<type id="ApiMeasure" hide="false" name="API" />
+    	<type id="ErrorDetectionMeasure" hide="false" />
+    	<type id="JmxMeasure" hide="false" />
+    	<type id="BrowserPerformanceNetworkMeasure" hide="false" />
+    	<type id="BrowserPerformanceJavaScriptMeasure" hide="false" />
+    	<type id="BrowserPerformanceServerMeasure" hide="false" />
+    	<type id="BrowserPerformanceRenderingMeasure" hide="false" />
+    	<type id="MemoryPoolMeasure" hide="false" />
+    </measuretypes>
 </dynatrace>

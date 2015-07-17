@@ -1,5 +1,6 @@
 package com.dynatrace.installvalidator.profile.parser.controller;
 
+import com.dynatrace.installvalidator.profile.library.model.MeasureType;
 import com.dynatrace.installvalidator.profile.parser.model.Measure;
 import com.dynatrace.installvalidator.profile.parser.model.SystemProfile;
 
@@ -9,18 +10,17 @@ import java.util.Iterator;
 /**
  * Created by kristof on 26.05.15.
  */
-public class MeasureController {
-    private static SystemProfile profile = null;
+public class MeasureController extends BaseController{
     private static ArrayList<String> typesToSkip;
     public MeasureController(SystemProfile profile) {
-        this.profile = profile;
+        super(profile);
         typesToSkip = getCustomMeasureTypesToExcludeFromListing();
     }
 
     public ArrayList<Measure> getCustomMeasures()
     {
         ArrayList<Measure> customMeasures = new ArrayList<Measure>();
-        ArrayList<Measure> measuresInProfile = profile.getMeasures();
+        ArrayList<Measure> measuresInProfile = getProfile().getMeasures();
         for (Iterator<Measure> measureIterator = measuresInProfile.iterator(); measureIterator.hasNext(); ) {
             Measure measure = measureIterator.next();
             if(measure.getUserDefined()&&!typesToSkip.contains(measure.getMeasureType())) customMeasures.add(measure);
@@ -32,7 +32,7 @@ public class MeasureController {
     public ArrayList<Measure> getMeasuresThatUseRegexEval(boolean onlyCustom)
     {
         ArrayList<Measure> regexMeasures = new ArrayList<Measure>();
-        ArrayList<Measure> measuresInProfile = profile.getMeasures();
+        ArrayList<Measure> measuresInProfile = getProfile().getMeasures();
         for (Iterator<Measure> measureIterator = measuresInProfile.iterator(); measureIterator.hasNext(); ) {
             Measure measure = measureIterator.next();
             if(onlyCustom && !measure.getUserDefined()) {}
@@ -75,7 +75,7 @@ public class MeasureController {
     public ArrayList<Measure> getMeasuresThatSplitByAgent(boolean onlyCustom, boolean skipKnownTypes)
     {
         ArrayList<Measure> splitMeasures = new ArrayList<Measure>();
-        ArrayList<Measure> measuresInProfile = profile.getMeasures();
+        ArrayList<Measure> measuresInProfile = getProfile().getMeasures();
         for (Iterator<Measure> measureIterator = measuresInProfile.iterator(); measureIterator.hasNext(); ) {
             Measure measure = measureIterator.next();
             if (onlyCustom && !measure.getUserDefined()) {}
@@ -101,7 +101,7 @@ public class MeasureController {
     public ArrayList<Measure> getMeasuresThatSplitByApplication(boolean onlyCustom, boolean skipKnownTypes)
     {
         ArrayList<Measure> splitMeasures = new ArrayList<Measure>();
-        ArrayList<Measure> measuresInProfile = profile.getMeasures();
+        ArrayList<Measure> measuresInProfile = getProfile().getMeasures();
         for (Iterator<Measure> measureIterator = measuresInProfile.iterator(); measureIterator.hasNext(); ) {
             Measure measure = measureIterator.next();
             if (onlyCustom && !measure.getUserDefined()) {
@@ -122,7 +122,7 @@ public class MeasureController {
     public ArrayList<Measure> getMeasuresOfType(boolean onlyCustom, String type)
     {
         ArrayList<Measure> measures = new ArrayList<Measure>();
-        ArrayList<Measure> measuresInProfile = profile.getMeasures();
+        ArrayList<Measure> measuresInProfile = getProfile().getMeasures();
         for (Iterator<Measure> measureIterator = measuresInProfile.iterator(); measureIterator.hasNext(); ) {
             Measure measure = measureIterator.next();
             if (onlyCustom && !measure.getUserDefined()) {
@@ -138,15 +138,34 @@ public class MeasureController {
     private ArrayList<String> getCustomMeasureTypesToExcludeFromListing()
     {
         ArrayList<String> list = new ArrayList<String>();
-        list.add("ApiMeasure");
-        list.add("ErrorDetectionMeasure");
-        //list.add("JmxMeasure");
-        list.add("BrowserPerformanceNetworkMeasure");
-        list.add("BrowserPerformanceJavaScriptMeasure");
-        list.add("BrowserPerformanceServerMeasure");
-        list.add("BrowserPerformanceRenderingMeasure");
-        list.add("MemoryPoolMeasure");
+        ArrayList<MeasureType> allTypes = getSensorLibrary().getMeasureTypes();
+        for (MeasureType measureType : allTypes) {
+			if (measureType.isHide()) list.add(measureType.getId());
+		}
 
         return list;
+    }
+    
+    private ArrayList<MeasureType> getCustomMeasureTypesToExclude()
+    {
+    	ArrayList<MeasureType> allTypes = getSensorLibrary().getMeasureTypes();
+    	ArrayList<MeasureType> excludeTypes = new ArrayList<MeasureType>();
+    	
+    	for (MeasureType measureType : allTypes) {
+			if (measureType.isHide()) excludeTypes.add(measureType);
+		}
+    	
+    	return excludeTypes;
+    }
+    
+    private String translateMeasureType(String measureTypeId)
+    {
+    	ArrayList<MeasureType> allTypes = getSensorLibrary().getMeasureTypes();
+    	
+    	for (MeasureType measureType : allTypes) {
+			if (measureType.isHide()) return measureType.getName();
+		}
+    	
+    	return measureTypeId;
     }
 }
