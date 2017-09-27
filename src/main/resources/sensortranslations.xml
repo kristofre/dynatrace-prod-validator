@@ -118,6 +118,7 @@
         <sensor id="com.dynatrace.diagnostics.knowledgesensor.js.core" name="JavaScript - Core" tech="Javascript"/>
         <sensor id="com.dynatrace.diagnostics.knowledgesensor.js.dojo" name="JavaScript - Dojo" tech="Javascript"/>
         <sensor id="com.dynatrace.diagnostics.knowledgesensor.js.icefaces" name="JavaScript - IceFaces" tech="Javascript"/>
+        <sensor id="com.dynatrace.diagnostics.knowledgesensor.js.errorhandler" name="UEM - ErrorHandler" tech="Javascript"/>
         <sensor id="com.dynatrace.diagnostics.knowledgesensor.js.jquery" name="JavaScript - Jquery" tech="Javascript"/>
         <sensor id="com.dynatrace.diagnostics.knowledgesensor.php.phpunit" name="PHP Unit" tech="php"/>
         <sensor id="com.dynatrace.diagnostics.knowledgesensor.js.thirdparty" name="JavaScript - Third Party" tech="Javascript"/>

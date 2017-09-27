@@ -401,7 +401,8 @@ public class HtmlProfileReport {
         {
             for (Iterator<UemModule> uemModuleIterator = modules.iterator(); uemModuleIterator.hasNext(); ) {
                 UemModule uemModule = uemModuleIterator.next();
-                uemOptions.append(htmlHelper.generateDivWithClass(translatePackageToSensorName(uemModule.getKey()), CssClass.LISTITEM));
+                if(uemModule.isActive())
+                	uemOptions.append(htmlHelper.generateDivWithClass(translatePackageToSensorName(uemModule.getKey()), CssClass.LISTITEM));
             }
         }
 

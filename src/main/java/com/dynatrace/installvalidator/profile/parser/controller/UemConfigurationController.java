@@ -1,6 +1,6 @@
 package com.dynatrace.installvalidator.profile.parser.controller;
 
-import com.dynatrace.installvalidator.App;
+//import com.dynatrace.installvalidator.App;
 import com.dynatrace.installvalidator.profile.parser.model.*;
 
 import java.util.ArrayList;
