@@ -11,8 +11,8 @@ import java.util.Map;
  * Created by kristof on 01.06.15.
  */
 public class SensorConfigurationController extends BaseController {
-    public SensorConfigurationController(SystemProfile profile) {
-        super(profile);
+    public SensorConfigurationController(SystemProfile profile, String configFile) {
+        super(profile, configFile);
     }
 
     public ArrayList<HashMap<String, String>> getPropertiesForSensor(String agentGroup, String fullSensorName)

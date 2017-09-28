@@ -13,8 +13,8 @@ import java.util.Iterator;
  * Created by kristof on 27.05.15.
  */
 public class SensorGroupController extends BaseController{
-    public SensorGroupController(SystemProfile profile) {
-        super(profile);
+    public SensorGroupController(SystemProfile profile, String configFile) {
+        super(profile, configFile);
     }
 
     public HashMap<String, String> getCustomSensorGroupsAsMap()

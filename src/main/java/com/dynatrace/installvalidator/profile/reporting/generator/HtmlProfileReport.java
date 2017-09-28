@@ -64,20 +64,20 @@ public class HtmlProfileReport {
     private String profileName;
     private long modDate;
     private String dTVersion;
-    public HtmlProfileReport(SystemProfile profile, String profileName, long modDate, String dTVersion) {
-    	this.sensorLibraryController = new SensorLibraryController(profile);
-    	this.measureController = new MeasureController(profile);
+    public HtmlProfileReport(SystemProfile profile, String profileName, long modDate, String dTVersion, String configFile) {
+    	this.sensorLibraryController = new SensorLibraryController(profile, configFile);
+    	this.measureController = new MeasureController(profile, configFile);
         this.uemConfigurationController = new UemConfigurationController(profile);
-        this.sensorGroupController = new SensorGroupController(profile);
-        this.profileController = new ProfileController(profile);
-        this.sensorConfigurationController = new SensorConfigurationController(profile);
+        this.sensorGroupController = new SensorGroupController(profile, configFile);
+        this.profileController = new ProfileController(profile, configFile);
+        this.sensorConfigurationController = new SensorConfigurationController(profile, configFile);
         this.profile = profile;
         this.profileName = profileName;
         this.modDate = modDate;
         this.dTVersion = dTVersion;
         this.sensorConfigValidator = new SensorConfigValidator();
-        this.businessTransactionController = new BusinessTransactionController(profile);
-        this.incidentRuleController = new IncidentRuleController(profile);
+        this.businessTransactionController = new BusinessTransactionController(profile, configFile);
+        this.incidentRuleController = new IncidentRuleController(profile, configFile);
         this.htmlHelper = new HtmlHelper();
         this.htmlCssFileReader = new HtmlCssFileReader();
     }

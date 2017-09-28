@@ -8,10 +8,12 @@ import com.dynatrace.installvalidator.profile.parser.model.SystemProfile;
  */
 public class BaseController {
     private static SystemProfile profile = null;
-    private SensorLibrary sensorLibrary;
+    protected SensorLibrary sensorLibrary;
+    protected String configFile;
 
-    public BaseController(SystemProfile profile) {
+    public BaseController(SystemProfile profile, String configFile) {
         this.profile = profile;
+        this.configFile = configFile;
         this.sensorLibrary = getSensorLibrary();
     }
 
@@ -25,7 +27,7 @@ public class BaseController {
     
     public SensorLibrary getSensorLibrary()
     {
-        sensorLibrary = SensorLibrary.getInstance();
+        sensorLibrary = SensorLibrary.getInstance(configFile);
         return sensorLibrary;
     }
 

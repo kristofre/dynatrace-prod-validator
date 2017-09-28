@@ -28,7 +28,7 @@ public class ProfileValidator
 		inputOption.setRequired(true);
 		options.addOption(inputOption);
 		options.addOption("o", "output", true, "file to write to [defaults to current directory]");
-		//options.addOption("c", "config", true, "optional config file to overwrite packaged one");
+		options.addOption("c", "config", true, "optional config file to overwrite packaged one");
 
 		try
 		{
@@ -37,14 +37,13 @@ public class ProfileValidator
 
 			String input = "";
 			String output = "";
-			String config = "";
-			if (line.hasOption("input")) input = line.getOptionValue("input");
-
-			if (line.hasOption("output")) output = line.getOptionValue("output");
+			String config = CONFIGFILELOCATION;
 			
+			if (line.hasOption("input")) input = line.getOptionValue("input");
+			if (line.hasOption("output")) output = line.getOptionValue("output");
 			if (line.hasOption("config")) config = line.getOptionValue("config");
 
-			processProfile(input, output);
+			processProfile(input, output, config);
 		} catch (ParseException e) {
 			System.out.println( e.getMessage());
 			HelpFormatter formatter = new HelpFormatter();
@@ -54,7 +53,7 @@ public class ProfileValidator
 
 	}
 
-	private static void processProfile(String inputFile, String outputFile)
+	private static void processProfile(String inputFile, String outputFile, String configFile)
 	{
 		File XMLfile = new File(inputFile);
 		String profileName = XMLfile.getName().substring(0, XMLfile.getName().indexOf(".profile.xml"));
@@ -73,7 +72,7 @@ public class ProfileValidator
 		ProfileRepository profileRepository = new ProfileRepository();
 		Dynatrace dynatrace = profileRepository.getDynatrace(XMLfile);
 		SystemProfile profile = dynatrace.getSystemProfile();
-		HtmlProfileReport report = new HtmlProfileReport(profile, profileName, XMLfile.lastModified(), dynatrace.getVersion());
+		HtmlProfileReport report = new HtmlProfileReport(profile, profileName, XMLfile.lastModified(), dynatrace.getVersion(), configFile);
 		
 		report.createReport(outputFile);
 	

@@ -22,8 +22,8 @@ import java.util.Iterator;
 public class SensorLibrary {
     private static SensorLibrary instance = null;
 
-    private static final String CONFIGFILELOCATION = "/sensortranslations.xml";
-    //private static final String SENSORLISTFILELOCATION = "target/classes/sensortranslations.xml";
+//    private static final String CONFIGFILELOCATION = "/sensortranslations.xml";
+//    private static final String SENSORLISTFILELOCATION = "target/classes/sensortranslations.xml";
     private File sensorTranslation;
     private ArrayList<SensorDetail> sensorDetails;
     private SensorDynatrace sensorDynatrace;
@@ -40,7 +40,7 @@ public class SensorLibrary {
     public static  String CICSTECH = "CICS";
     public static  String SAMPLINGTECH = "Sampling";
 
-    protected SensorLibrary() {
+    protected SensorLibrary(String configFile) {
         JAXBContext jaxbContext = null;
         try {
             jaxbContext = JAXBContext.newInstance(SensorDynatrace.class);
@@ -48,7 +48,7 @@ public class SensorLibrary {
             //File XMLfile = new File(SENSORLISTFILELOCATION);
             //sensorDynatrace = (SensorDynatrace) jaxbUnmarshaller.unmarshal(XMLfile);
             
-            InputStream stream = getClass().getResourceAsStream(CONFIGFILELOCATION);
+            InputStream stream = getClass().getResourceAsStream(configFile);
             sensorDynatrace = (SensorDynatrace) jaxbUnmarshaller.unmarshal(stream);
 
         } catch (JAXBException e) {
@@ -57,9 +57,9 @@ public class SensorLibrary {
 
 
     }
-    public static SensorLibrary getInstance(){
+    public static SensorLibrary getInstance(String configFile){
         if (instance == null){
-            instance = new SensorLibrary();
+            instance = new SensorLibrary(configFile);
         }
         return instance;
     }

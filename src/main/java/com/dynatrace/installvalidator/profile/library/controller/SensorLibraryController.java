@@ -15,8 +15,8 @@ import java.util.Iterator;
 public class SensorLibraryController extends BaseController{
     private SensorLibrary sensorLibrary;
 
-    public SensorLibraryController(SystemProfile profile) {
-        super(profile);
+    public SensorLibraryController(SystemProfile profile, String configFile) {
+        super(profile, configFile);
         this.sensorLibrary = getSensorLibrary();
     }
 

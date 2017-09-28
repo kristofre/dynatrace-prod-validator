@@ -10,8 +10,8 @@ import java.util.Iterator;
  * Created by kristof on 14.07.15.
  */
 public class BusinessTransactionController extends BaseController {
-    public BusinessTransactionController(SystemProfile profile) {
-        super(profile);
+    public BusinessTransactionController(SystemProfile profile, String configFile) {
+        super(profile, configFile);
     }
 
     public ArrayList<BusinessTransaction> getBusinessTransactions()

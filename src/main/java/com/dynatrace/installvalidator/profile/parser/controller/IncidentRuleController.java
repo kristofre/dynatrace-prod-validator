@@ -11,8 +11,8 @@ import java.util.Iterator;
  * Created by kristof on 15.07.15.
  */
 public class IncidentRuleController extends BaseController {
-    public IncidentRuleController(SystemProfile profile) {
-        super(profile);
+    public IncidentRuleController(SystemProfile profile, String configFile) {
+        super(profile, configFile);
     }
 
     public ArrayList<IncidentRule> getIncidentRules()

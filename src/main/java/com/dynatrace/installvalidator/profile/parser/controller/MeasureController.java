@@ -12,8 +12,8 @@ import java.util.Iterator;
  */
 public class MeasureController extends BaseController{
     private static ArrayList<String> typesToSkip;
-    public MeasureController(SystemProfile profile) {
-        super(profile);
+    public MeasureController(SystemProfile profile, String configFile) {
+        super(profile, configFile);
         typesToSkip = getCustomMeasureTypesToExcludeFromListing();
     }
 

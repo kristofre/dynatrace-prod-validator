@@ -10,8 +10,8 @@ import java.util.Iterator;
  * Created by kristof on 01.06.15.
  */
 public class ProfileController extends BaseController {
-    public ProfileController(SystemProfile profile) {
-        super(profile);
+    public ProfileController(SystemProfile profile, String configFile) {
+        super(profile, configFile);
     }
 
     public ArrayList<String> getActiveTechnologies()
