@@ -27,7 +27,7 @@ public class ProfileValidator
 		Option inputOption = new Option("i", "input", true, "system profile to be analyzed [required]");
 		inputOption.setRequired(true);
 		options.addOption(inputOption);
-		options.addOption("o", "out", true, "file to write to [defaults to current directory]");
+		options.addOption("o", "output", true, "file to write to [defaults to current directory]");
 		//options.addOption("c", "config", true, "optional config file to overwrite packaged one");
 
 		try
